@@ -28,6 +28,10 @@ std::string RequestInput<std::string>(
 // program. It continuously re-prompts on invalid input. Once valid input is
 // received, it returns the result.
 bool RequestContinue();
+
+// ClearScreen clears all text from the screen. It operates independent of
+// platform.
+void ClearScreen();
 }  // namespace common
 }  // namespace mjohnson
 

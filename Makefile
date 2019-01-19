@@ -1,5 +1,6 @@
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+SOURCE_DIR ?= $(dir $(MAKEFILE_PATH))
 BUILD_DIR ?= ${HOME}/Downloads/CIST2362
-SOURCE_DIR ?= .
 
 SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sed 's: :\\ :g')
 SRCS := $(SRCS:$(SOURCE_DIR)/%=%)

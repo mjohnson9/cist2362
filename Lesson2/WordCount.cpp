@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "./common.h"
+#include "../common.h"
 
 namespace mjohnson {
 namespace wordcount {
@@ -16,6 +16,8 @@ int CountWords(const char*);
 bool IsLetter(const char);
 
 void Run() {
+  mjohnson::common::ClearScreen();
+
   if (RunUnitTests()) {
     std::cout << "Unit tests passed." << std::endl;
   } else {
@@ -69,22 +71,6 @@ int CountWords(const char* str) {
 
 bool IsLetter(const char c) {
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-}
-
-std::string GetInputLine() {
-  std::string response;
-  {  // Put this in its own scope to reduce scope pollution
-    char next_char;
-    do {
-      next_char = std::cin.peek();
-      if (next_char == '\r' || next_char == '\n') {
-        std::cin.get(next_char);  // Remove the newline from the buffer
-      }
-    } while (next_char == '\r' ||
-             next_char == '\n');  // Continue as long as we encounter newlines
-  }
-  std::getline(std::cin, response);
-  return response;
 }
 
 // TestCase represents a unit test case. It contains a string to be tested and

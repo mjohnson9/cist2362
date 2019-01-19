@@ -31,6 +31,7 @@ T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
     if (std::cin.fail()) {  // cin.fail returns true when we attempt to extract
                             // a type from the stream, but the data that the
                             // user entered cannot be converted to that type.
+      ClearScreen();
       const std::string type_name = GetTypeName<T>();
       std::cout << "You have given an invalid " << type_name
                 << ". Please provide a valid " << type_name << ".";
@@ -47,6 +48,7 @@ T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
     }
 
     if (!valid) {
+      ClearScreen();
       ClearInvalidInput();
     }
   } while (!valid);
@@ -73,11 +75,25 @@ std::string RequestInput<std::string>(
     }
 
     if (!valid) {
+      ClearScreen();
       ClearInvalidInput();
     }
   } while (!valid);
 
   return response;
+}
+
+void ClearScreen() {
+  // It feels nasty forking a process to clear the screen, but it's a better
+  // alternative to including something like ncurses
+#if defined(_WIN32) || defined(_WIN64)
+  system("CLS");
+#elif defined(unix) || defined(__unix__) || defined(__unix) || \
+    (defined(__APPLE__) && defined(__MACH__))
+  system("clear");
+#else
+#error "Operating system not supported"
+#endif
 }
 
 // ValidateContinueResponse is a validation function for RequestInput. It
