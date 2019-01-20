@@ -12,9 +12,9 @@
 namespace monthlytemperatures {
 // Forward declarations
 
-// MONTH_NAMES is an array containing the names of the months. It is used for
+// month_names is an array containing the names of the months. It is used for
 // convenience and user display.
-const char* MONTH_NAMES[] = {"January",   "February", "March",    "April",
+const char* month_names[] = {"January",   "February", "March",    "April",
                              "May",       "June",     "July",     "August",
                              "September", "October",  "November", "December"};
 
@@ -89,7 +89,7 @@ void Run() {
 
 void GetData(float temperatures[12][2]) {
   for (size_t month = 0; month < 12; month++) {
-    const std::string month_name = MONTH_NAMES[month];
+    const std::string month_name = month_names[month];
 
     bool valid = true;
     do {
@@ -252,12 +252,12 @@ void HandleInvalidInput() {
 }  // namespace monthlytemperatures
 
 int main(int argc, char* argv[]) {
-  bool runUnitTests;
-  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+  bool run_unit_tests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
   }
 
-  if (runUnitTests) {
+  if (run_unit_tests) {
     std::cout << "This program has no unit tests." << std::endl;
     return 0;
   }
