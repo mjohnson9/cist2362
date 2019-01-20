@@ -4,9 +4,6 @@
 # Format style is Google
 FormatStyle: google
 
-# Disabled:
-#  -google-readability-namespace-comments the BIGTABLE_CLIENT_NS is a macro, and
-#   clang-tidy fails to match it against the initial value.
 Checks: >-
   bugprone-*,
   google-readability-*,
@@ -14,8 +11,7 @@ Checks: >-
   modernize-*,
   readability-*,
   performance-*,
-  -google-readability-namespace-comments,
-  -readability-named-parameter
+  -bugprone-exception-escape
 
 # Enable most warnings as errors.
 WarningsAsErrors: >-
