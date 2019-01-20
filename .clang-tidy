@@ -6,7 +6,7 @@ FormatStyle: google
 
 Checks: >-
   bugprone-*,
-  google-readability-*,
+  google-*,
   misc-*,
   modernize-*,
   readability-*,
