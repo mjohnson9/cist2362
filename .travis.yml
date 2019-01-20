@@ -9,6 +9,7 @@ compiler:
   - gcc
 install:
   - sudo -i pip install cpplint
+  - '[ "${TRAVIS_OS_NAME}" == "osx" ] && brew install llvm --with-clang --with-clang-extra-tools'
 before_script:
   - which cpplint && make -j1 lint
   - which clang-tidy && make -j1 tidy
