@@ -1,10 +1,10 @@
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-SOURCE_DIR ?= $(dir $(MAKEFILE_PATH))
-BUILD_DIR ?= $(SOURCE_DIR)/build
+SOURCE_DIR := $(dir $(MAKEFILE_PATH))
+SOURCE_DIR := $(SOURCE_DIR:%/=%)
+BUILD_DIR := $(SOURCE_DIR)/build
 
 SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sed 's: :\\ :g')
-SRCS := $(SRCS:$(SOURCE_DIR)/%=%)
-BINS := $(SRCS:%.cpp=$(BUILD_DIR)/%)
+BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
 
