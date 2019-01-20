@@ -8,8 +8,7 @@ BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
 
-MKDIR_P := mkdir -p
-RM := trash
+MKDIR_P ?= mkdir -p
 
 CPPFLAGS ?= -std=c++11 -Wall -O0
 
@@ -33,7 +32,7 @@ $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
 
 $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
-	clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)"
+	-clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)"
 
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 
