@@ -7,6 +7,7 @@ SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | se
 BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
+LINTS := $(SRCS:%=%.lint)
 
 MKDIR_P ?= mkdir -p
 
@@ -34,7 +35,12 @@ $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
 	clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)"
 
+$(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
+	cpplint "$(@:%.lint=%)"
+
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
+
+lint: $(LINTS) $(SOURCE_DIR)/common.cpp.lint
 
 test: $(TESTS)
 	@echo "Tests passed"
