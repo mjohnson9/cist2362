@@ -58,9 +58,9 @@ void Run() {
                 << "With the given parameters, the loan will "
                 << "never be paid off. The first month's interest is $"
                 << std::fixed << std::setprecision(2) << first_months_interest
-                << " while the payment is only $" << payment << "."
-                << std::defaultfloat << std::endl
+                << " while the payment is only $" << payment << "." << std::endl
                 << std::endl;
+      std::cout.unsetf(std::ios_base::floatfield);
       continue;  // Go to the next iteration of the loop
     }
 

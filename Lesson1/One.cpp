@@ -85,7 +85,7 @@ void PrintRoyalties(int copies, float net_price) {
     std::cout << "| " << RoyaltyOptionToString(i, false) << ": $"
               << royalties[i] << std::endl;
   }
-  std::cout << std::defaultfloat;
+  std::cout.unsetf(std::ios_base::floatfield);
 
   // Find the largest royalty's index
   int largest_royalty = 0;
@@ -117,8 +117,9 @@ void PrintRoyalties(int copies, float net_price) {
       std::string royalty_name = RoyaltyOptionToString(largest_royalty, true);
       std::cout << "| Your best royalty option would be the " << royalty_name
                 << " one. It will provide $" << std::fixed
-                << std::setprecision(2) << royalties[largest_royalty]
-                << std::defaultfloat << "." << std::endl;
+                << std::setprecision(2) << royalties[largest_royalty] << "."
+                << std::endl;
+      std::cout.unsetf(std::ios_base::floatfield);
     } break;
     case 2: {
       std::string royalty_name1, royalty_name2;
@@ -136,14 +137,15 @@ void PrintRoyalties(int copies, float net_price) {
       std::cout << "| Both the " << royalty_name1 << " and " << royalty_name2
                 << " royalty would be the best option. They both provide $"
                 << std::fixed << std::setprecision(2)
-                << royalties[largest_royalty] << std::defaultfloat << "."
-                << std::endl;
+                << royalties[largest_royalty] << "." << std::endl;
+      std::cout.unsetf(std::ios_base::floatfield);
     } break;
     case 3: {
       std::cout << "| None of the royalty options would be better than the "
                 << "other. They all provide $" << std::fixed
-                << std::setprecision(2) << royalties[largest_royalty]
-                << std::defaultfloat << "." << std::endl;
+                << std::setprecision(2) << royalties[largest_royalty] << "."
+                << std::endl;
+      std::cout.unsetf(std::ios_base::floatfield);
     } break;
     default:
       // It should be impossible to reach this point. Thus, if we do reach

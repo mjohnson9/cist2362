@@ -65,23 +65,27 @@ void Run() {
 
     std::cout << "The average high temperature for the year was " << std::fixed
               << std::setprecision(1) << AverageHigh(temperatures) << "."
-              << std::defaultfloat << std::endl;
+              << std::endl;
+    std::cout.unsetf(std::ios_base::floatfield);
 
     std::cout << "The average low temperature for the year was " << std::fixed
               << std::setprecision(1) << AverageLow(temperatures) << "."
-              << std::defaultfloat << std::endl;
+              << std::endl;
+    std::cout.unsetf(std::ios_base::floatfield);
 
     const size_t highest_temp_index = IndexHighTemp(temperatures);
     std::cout << "The highest temperature for the year was " << std::fixed
               << std::setprecision(1)
               << temperatures[highest_temp_index][TEMP_HIGHEST] << "."
-              << std::defaultfloat << std::endl;
+              << std::endl;
+    std::cout.unsetf(std::ios_base::floatfield);
 
     const size_t lowest_temp_index = IndexLowTemp(temperatures);
     std::cout << "The lowest temperature for the year was " << std::fixed
               << std::setprecision(1)
               << temperatures[lowest_temp_index][TEMP_LOWEST] << "."
-              << std::defaultfloat << std::endl;
+              << std::endl;
+    std::cout.unsetf(std::ios_base::floatfield);
 
     std::cout << std::endl;  // Extra line to separate the continue question
   } while (RequestContinue());
