@@ -9,11 +9,14 @@
 
 namespace mjohnson {
 namespace wordcount {
-// Runs unit tests to confirm program functionality
-bool RunUnitTests();
-int CountWords(const std::string&);
-int CountWords(const char*);
-bool IsLetter(char);
+// CountWords counts the number of words in a string. It does not count numbers
+// or special characters as words, only contiguous groups of letter.
+int CountWords(const std::string& str);
+// CountWords counts the number of words in a string. It does not count numbers
+// or special characters as words, only contiguous groups of letter.
+int CountWords(const char str[]);
+// IsLetter checks if a given character is a letter.
+bool IsLetter(char c);
 
 void Run() {
   do {
