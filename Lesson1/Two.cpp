@@ -196,12 +196,12 @@ void HandleInvalidInput() {
 }  // namespace loancalculator
 
 int main(int argc, char* argv[]) {
-  bool runUnitTests;
-  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+  bool run_unit_tests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
   }
 
-  if (runUnitTests) {
+  if (run_unit_tests) {
     std::cout << "This program has no unit tests." << std::endl;
     return 0;
   }
