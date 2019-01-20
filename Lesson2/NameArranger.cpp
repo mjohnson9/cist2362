@@ -11,22 +11,22 @@ void RequestName(const std::string& prompt, char* buffer, size_t buffer_size);
 
 void Run() {
   do {
-    static const size_t MAX_NAME_SIZE = 0xFF;
+    static const size_t max_name_size = 0xFF;
 
-    char first_name[MAX_NAME_SIZE];
-    first_name[MAX_NAME_SIZE - 1] = '\0';
-    char middle_name[MAX_NAME_SIZE];
-    middle_name[MAX_NAME_SIZE - 1] = '\0';
-    char last_name[MAX_NAME_SIZE];
-    last_name[MAX_NAME_SIZE - 1] = '\0';
+    char first_name[max_name_size];
+    first_name[max_name_size - 1] = '\0';
+    char middle_name[max_name_size];
+    middle_name[max_name_size - 1] = '\0';
+    char last_name[max_name_size];
+    last_name[max_name_size - 1] = '\0';
 
-    RequestName("What is your first name? ", first_name, MAX_NAME_SIZE);
+    RequestName("What is your first name? ", first_name, max_name_size);
     const size_t first_name_len = strlen(first_name);
 
-    RequestName("What is your middle name? ", middle_name, MAX_NAME_SIZE);
+    RequestName("What is your middle name? ", middle_name, max_name_size);
     const size_t middle_name_len = strlen(middle_name);
 
-    RequestName("What is your last name? ", last_name, MAX_NAME_SIZE);
+    RequestName("What is your last name? ", last_name, max_name_size);
     const size_t last_name_len = strlen(last_name);
 
     mjohnson::common::ClearScreen();
@@ -115,7 +115,7 @@ struct TestCase {
 };
 
 bool RunUnitTests() {
-  static const TestCase TRIM_CASES[] = {
+  static const TestCase trim_cases[] = {
       {"", ""},
       {" ", ""},
       {"  ", ""},
@@ -129,13 +129,13 @@ bool RunUnitTests() {
       {"    F    i    r    s    t", "F i r s t"},
   };
 
-  for (auto test_case : TRIM_CASES) {
+  for (auto const& test_case : trim_cases) {
     const size_t result_size =
         std::max(test_case.original.length(), test_case.expected.length()) + 1;
     char result[result_size];
     result[result_size - 1] = '\0';
 
-    strcpy(result, test_case.original.c_str());
+    strncpy(result, test_case.original.c_str(), result_size);
 
     TrimSpaces(result, result_size);
 
@@ -152,12 +152,12 @@ bool RunUnitTests() {
 }  // namespace mjohnson
 
 int main(int argc, char* argv[]) {
-  bool runUnitTests;
-  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+  bool run_unit_tests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
   }
 
-  if (runUnitTests) {
+  if (run_unit_tests) {
     const bool result = mjohnson::namearranger::RunUnitTests();
 
     if (!result) {
