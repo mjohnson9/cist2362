@@ -71,8 +71,8 @@ float CalculateRoyalties(RoyaltyOption option, int copies, float net_price) {
 }
 
 void PrintRoyalties(int copies, float net_price) {
-  const int NUM_ROYALTIES = 3;
-  float royalties[NUM_ROYALTIES] = {
+  const int num_royalties = 3;
+  float royalties[num_royalties] = {
       CalculateRoyalties(FIRST, copies, net_price),
       CalculateRoyalties(SECOND, copies, net_price),
       CalculateRoyalties(THIRD, copies, net_price)};
@@ -81,7 +81,7 @@ void PrintRoyalties(int copies, float net_price) {
   std::cout << "|---------------------------" << std::endl
             << "| Royalty results:" << std::endl;
   std::cout << std::fixed << std::setprecision(2);
-  for (size_t i = 0; i < NUM_ROYALTIES; i++) {
+  for (size_t i = 0; i < num_royalties; i++) {
     std::cout << "| " << RoyaltyOptionToString(i, false) << ": $"
               << royalties[i] << std::endl;
   }
@@ -89,9 +89,9 @@ void PrintRoyalties(int copies, float net_price) {
 
   // Find the largest royalty's index
   int largest_royalty = 0;
-  bool largest_royalties[NUM_ROYALTIES] = {true, false, false};
+  bool largest_royalties[num_royalties] = {true, false, false};
 
-  for (size_t i = 1; i < NUM_ROYALTIES; i++) {
+  for (size_t i = 1; i < num_royalties; i++) {
     if (royalties[i] > royalties[largest_royalty]) {
       largest_royalty = i;
       for (bool& largest_royaltie : largest_royalties) {
@@ -122,7 +122,7 @@ void PrintRoyalties(int copies, float net_price) {
     } break;
     case 2: {
       std::string royalty_name1, royalty_name2;
-      for (size_t i = 0; i < NUM_ROYALTIES; i++) {
+      for (size_t i = 0; i < num_royalties; i++) {
         if (!largest_royalties[i]) {
           continue;  // Ignore this iteration of the loop if this royalty
                      // isn't in the list of largest royalties.
@@ -252,12 +252,12 @@ std::string RoyaltyOptionToString(int option_index, bool lowercase) {
 }  // namespace authorcontract
 
 int main(int argc, char* argv[]) {
-  bool runUnitTests;
-  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+  bool run_unit_tests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
   }
 
-  if (runUnitTests) {
+  if (run_unit_tests) {
     std::cout << "This program has no unit tests." << std::endl;
     return 0;
   }
