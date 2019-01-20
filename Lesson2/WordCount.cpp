@@ -11,16 +11,16 @@ namespace mjohnson {
 namespace wordcount {
 // Runs unit tests to confirm program functionality
 bool RunUnitTests();
-int CountWords(const std::string);
+int CountWords(const std::string&);
 int CountWords(const char*);
-bool IsLetter(const char);
+bool IsLetter(char);
 
 void Run() {
   do {
     mjohnson::common::ClearScreen();
 
     const std::string input = mjohnson::common::RequestInput<std::string>(
-        "Enter a sentence or phrase to have its words counted:\n", NULL);
+        "Enter a sentence or phrase to have its words counted:\n", nullptr);
     const int words = CountWords(input);
     std::cout << std::endl
               << "\"" << input << "\" has " << words << " words in it."
@@ -29,7 +29,7 @@ void Run() {
   } while (mjohnson::common::RequestContinue());
 }
 
-int CountWords(const std::string str) { return CountWords(str.c_str()); }
+int CountWords(const std::string& str) { return CountWords(str.c_str()); }
 
 int CountWords(const char* str) {
   if (str[0] == '\0') {
@@ -39,25 +39,25 @@ int CountWords(const char* str) {
 
   // Initialize based on first character
   int words = (IsLetter(str[0]) ? 1 : 0);
-  bool lastWasWord = IsLetter(str[0]);
+  bool last_was_word = IsLetter(str[0]);
 
   for (size_t i = 1; str[i] != '\0';
        i++) {  // Skip the first character; we already processed it
     const char c = str[i];
     if (!IsLetter(c)) {
-      lastWasWord = false;
+      last_was_word = false;
       continue;
       // This is a non-word; don't count words
     }
 
-    if (lastWasWord) {
+    if (last_was_word) {
       continue;
       // This is a word following a word; don't count a new word
     }
 
     // This is a word following a non-word; count a word
     words += 1;
-    lastWasWord = true;  // Don't count the next characters as words
+    last_was_word = true;  // Don't count the next characters as words
   }
 
   return words;
@@ -77,7 +77,7 @@ struct TestCase {
 };
 
 bool RunUnitTests() {
-  static const TestCase CASES[] = {
+  static const TestCase cases[] = {
       {"", 0},  // Spaces aren't words; expect 0
       {" ", 0},
       {"  ", 0},
@@ -103,7 +103,7 @@ bool RunUnitTests() {
       {" T e s t ", 4},
   };
 
-  for (auto test_case : CASES) {
+  for (auto const& test_case : cases) {
     const int words = CountWords(test_case.example);
     if (words != test_case.expected_words) {
       std::cout << "Unit test failed: Expected " << test_case.expected_words
@@ -118,12 +118,12 @@ bool RunUnitTests() {
 }  // namespace mjohnson
 
 int main(int argc, char* argv[]) {
-  bool runUnitTests;
-  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+  bool run_unit_tests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
   }
 
-  if (runUnitTests) {
+  if (run_unit_tests) {
     const bool result = mjohnson::wordcount::RunUnitTests();
 
     if (!result) {
