@@ -9,8 +9,9 @@ compiler:
   - gcc
 install:
   - sudo -i pip install cpplint
+before_script:
+  - make -j1 lint
+  - make -j1 tidy
 script:
   - make -j2 all
   - make -j1 test
-  - make -j1 lint
-  - make -j1 tidy
