@@ -32,8 +32,7 @@ $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
 
 $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
-	-clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)" > "$@"
-	@cat "$@"
+	-clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)"
 
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 

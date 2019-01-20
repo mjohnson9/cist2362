@@ -2,9 +2,6 @@
 ## Build directory
 build
 
-## Tidy messages
-*.cpp.tidy
-
 # C++ ignores
 ## Prerequisites
 *.d
