@@ -1,5 +1,6 @@
 // Copyright 2019 Michael Johnson
 
+#include <cstring>
 #include <iostream>
 
 #include "../common.h"
