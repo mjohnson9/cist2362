@@ -10,8 +10,8 @@ compiler:
 install:
   - sudo -i pip install cpplint
 before_script:
-  - make -j1 lint
-  - make -j1 tidy
+  - which cpplint && make -j1 lint
+  - which clang-tidy && make -j1 tidy
 script:
   - make -j2 all
   - make -j1 test
