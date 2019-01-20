@@ -22,7 +22,8 @@ template <>
 std::string GetTypeName<double>();
 
 template <typename T>
-T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
+T RequestInput(const std::string& prompt,
+               const std::function<bool(T)>& validator) {
   bool valid = true;
   T response;
   do {
@@ -61,7 +62,8 @@ T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
 // single word.
 template <>
 std::string RequestInput<std::string>(
-    const std::string& prompt, std::function<bool(std::string)> validator) {
+    const std::string& prompt,
+    const std::function<bool(std::string)>& validator) {
   bool valid = true;
   std::string response;
   do {
@@ -80,34 +82,32 @@ std::string RequestInput<std::string>(
   return response;
 }
 
-bool ParseArgs(int argc, char* argv[], bool* runUnitTests) {
+bool ParseArgs(int argc, char* argv[], bool* run_unit_tests) {
   if (argc <= 1) {
     // The only argument is the program name
     return true;
   }
 
-  if (runUnitTests == NULL) {  // Check for null pointer
-    throw new std::invalid_argument("runUnitTests");
+  if (run_unit_tests == nullptr) {  // Check for null pointer
+    throw std::invalid_argument("run_unit_tests");
   }
 
-  bool badArg = false;
+  *run_unit_tests = false;
+
+  bool bad_arg = false;
   // Skip the first argument, since it's the program path
   for (int i = 1; i < argc; i++) {
     const std::string arg(argv[i]);  // convert to a std::string so that we
                                      // don't have to use strcmp
     if (arg == "-test") {
-      *runUnitTests = true;
+      *run_unit_tests = true;
     } else {
-      badArg = true;
+      bad_arg = true;
       std::cout << "Unexpected argument: " << arg << std::endl;
     }
   }
 
-  if (badArg) {
-    return false;
-  }
-
-  return true;
+  return !bad_arg;  // Return false if we have a bad argument; true otherwise
 }
 
 void ClearScreen() {
@@ -125,7 +125,7 @@ void ClearScreen() {
 
 // ValidateContinueResponse is a validation function for RequestInput. It
 // validates that a response to the continue question can be used.
-bool ValidateContinueResponse(std::string response);
+bool ValidateContinueResponse(const std::string& response);
 
 bool RequestContinue() {
   while (true) {
@@ -146,33 +146,34 @@ bool RequestContinue() {
     }
 
     // We should never reach this point
-    throw new std::invalid_argument("response");
+    throw std::invalid_argument("response");
   }
 }
 
-bool ValidateContinueResponse(std::string response) {
+bool ValidateContinueResponse(const std::string& response) {
   if (response.empty()) {
     // Shortcut; we allow empty responses
     return true;
   }
 
-  std::string modifiedResposne = response;  // Copy the response string
+  std::string modified_response = response;  // Copy the response string
 
   // Lowercase the response to make it easier to compare
-  std::transform(modifiedResposne.begin(), modifiedResposne.end(),
-                 modifiedResposne.begin(), ::tolower);
+  std::transform(modified_response.begin(), modified_response.end(),
+                 modified_response.begin(), ::tolower);
 
-  const bool isValid = (modifiedResposne == "y" || modifiedResposne == "yes" ||
-                        modifiedResposne == "n" || modifiedResposne == "no");
-  if (!isValid) {
+  const bool is_valid =
+      (modified_response == "y" || modified_response == "yes" ||
+       modified_response == "n" || modified_response == "no");
+  if (!is_valid) {
     std::cout
-        << modifiedResposne
+        << response
         << " is an invalid response. Available responses are yes, y, no, or n."
         << std::endl
         << std::endl;
   }
 
-  return isValid;
+  return is_valid;
 }
 
 void ClearInvalidInput() {
@@ -186,7 +187,7 @@ template <typename T>
 std::string GetTypeName() {
   // There's no specialized function for this type; throw an exception, because
   // we can't identify it
-  throw new std::invalid_argument("T");
+  throw std::invalid_argument("T");
 }
 template <>
 std::string GetTypeName<int>() {
