@@ -41,6 +41,7 @@ T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
       continue;  // Fail fast and attempt another prompt
     }
 
+    ClearScreen();
     if (validator) {  // Validator has a bool operator that tells us whether or
                       // not the function is empty
       valid = validator(response);
@@ -49,7 +50,6 @@ T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
     }
 
     if (!valid) {
-      ClearScreen();
       ClearInvalidInput();
     }
   } while (!valid);
@@ -68,16 +68,12 @@ std::string RequestInput<std::string>(
     std::cout << prompt;
     std::getline(std::cin, response);
 
+    ClearScreen();
     if (validator) {  // Validator has a bool operator that tells us whether or
                       // not the function is empty
       valid = validator(response);
     } else {
       valid = true;
-    }
-
-    if (!valid) {
-      ClearScreen();
-      ClearInvalidInput();
     }
   } while (!valid);
 
@@ -115,8 +111,8 @@ bool ParseArgs(int argc, char* argv[], bool* runUnitTests) {
 }
 
 void ClearScreen() {
-  // It feels nasty forking a process to clear the screen, but it's a better
-  // alternative to including something like ncurses
+// It feels nasty forking a process to clear the screen, but it's a better
+// alternative to including something like ncurses
 #if defined(_WIN32) || defined(_WIN64)
   system("CLS");
 #elif defined(unix) || defined(__unix__) || defined(__unix) || \
