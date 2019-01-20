@@ -13,11 +13,11 @@ void Run() {
   do {
     static const size_t max_name_size = 0xFF;
 
-    char first_name[max_name_size];
+    char first_name[max_name_size];  // NOLINT(runtime/arrays)
     first_name[max_name_size - 1] = '\0';
-    char middle_name[max_name_size];
+    char middle_name[max_name_size];  // NOLINT(runtime/arrays)
     middle_name[max_name_size - 1] = '\0';
-    char last_name[max_name_size];
+    char last_name[max_name_size];  // NOLINT(runtime/arrays)
     last_name[max_name_size - 1] = '\0';
 
     RequestName("What is your first name? ", first_name, max_name_size);
@@ -36,7 +36,7 @@ void Run() {
     const size_t assembled_name_len = last_name_len + 2 /* comma space */ +
                                       first_name_len + 1 /* space */ +
                                       middle_name_len + 1 /*null terminator */;
-    char assembled_name[assembled_name_len];
+    char assembled_name[assembled_name_len];        // NOLINT(runtime/arrays)
     assembled_name[assembled_name_len - 1] = '\0';  // Terminate with null
 
     {  // New scope to reduce clutter
@@ -132,7 +132,7 @@ bool RunUnitTests() {
   for (auto const& test_case : trim_cases) {
     const size_t result_size =
         std::max(test_case.original.length(), test_case.expected.length()) + 1;
-    char result[result_size];
+    char result[result_size];  // NOLINT(runtime/arrays)
     result[result_size - 1] = '\0';
 
     strncpy(result, test_case.original.c_str(), result_size);
