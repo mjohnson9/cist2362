@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 
+#include "../common.h"
+
 namespace authorcontract {
 enum RoyaltyOption { FIRST, SECOND, THIRD };
 
@@ -249,7 +251,17 @@ std::string RoyaltyOptionToString(int option_index, bool lowercase) {
 }
 }  // namespace authorcontract
 
-int main() {
+int main(int argc, char* argv[]) {
+  bool runUnitTests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+    return 1;
+  }
+
+  if (runUnitTests) {
+    std::cout << "This program has no unit tests." << std::endl;
+    return 0;
+  }
+
   authorcontract::Run();
   return 0;
 }

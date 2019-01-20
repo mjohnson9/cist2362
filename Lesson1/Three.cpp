@@ -2,19 +2,21 @@
 //
 // This program
 
+#include <functional>
 #include <iomanip>
 #include <iostream>
-#include <functional>
 #include <string>
+
+#include "../common.h"
 
 namespace monthlytemperatures {
 // Forward declarations
 
 // MONTH_NAMES is an array containing the names of the months. It is used for
 // convenience and user display.
-const char* MONTH_NAMES[] = {
-  "January", "February", "March",     "April",   "May",      "June",
-  "July",    "August",   "September", "October", "November", "December"};
+const char* MONTH_NAMES[] = {"January",   "February", "March",    "April",
+                             "May",       "June",     "July",     "August",
+                             "September", "October",  "November", "December"};
 
 // TEMP_LOWEST is the index of the second dimension of the array that
 // represents the lowest temperature.
@@ -92,18 +94,19 @@ void GetData(float temperatures[12][2]) {
     bool valid = true;
     do {
       const auto lowest_temp = RequestInput<float>(
-        "In Farenheit, what was the lowest temperature for the month of "
-        + month_name + "? ",
-        ValidateFarenheitTemperature);
+          "In Farenheit, what was the lowest temperature for the month of " +
+              month_name + "? ",
+          ValidateFarenheitTemperature);
 
       const auto highest_temp = RequestInput<float>(
-        "In Farenheit, what was the highest temperature for the month of "
-        + month_name + "? ",
-        ValidateFarenheitTemperature);
+          "In Farenheit, what was the highest temperature for the month of " +
+              month_name + "? ",
+          ValidateFarenheitTemperature);
 
       if (lowest_temp > highest_temp) {
         std::cout << "The lowest temperature cannot be higher than the"
-                  << " highest temperature." << std::endl << std::endl;
+                  << " highest temperature." << std::endl
+                  << std::endl;
         valid = false;
       } else {
         temperatures[month][TEMP_LOWEST] = lowest_temp;
@@ -166,8 +169,8 @@ size_t IndexLowTemp(float temperatures[12][2]) {
   return lowest_temp_index;
 }
 
-template<typename T> T RequestInput(const std::string& prompt,
-                         std::function<bool(T)> validator) {
+template <typename T>
+T RequestInput(const std::string& prompt, std::function<bool(T)> validator) {
   bool valid = true;
   T response;
   do {
@@ -203,7 +206,7 @@ bool RequestContinue() {
     std::cout << "Would you like to run the program again? ";
 
     std::string response;
-    { // Put this in its own scope to reduce scope pollution
+    {  // Put this in its own scope to reduce scope pollution
       char next_char;
       do {
         next_char = std::cin.peek();
@@ -229,25 +232,36 @@ bool RequestContinue() {
       return false;
     }
     std::cout << response << " is an invalid response. Available responses"
-      << " are yes, y, no, or n." << std::endl << std::endl;
+              << " are yes, y, no, or n." << std::endl
+              << std::endl;
   }
 }
 
 bool ValidateFarenheitTemperature(float temperature) {
   return temperature > -459.67f;  // -459.67F is absolute zero; a Farenheit
-                                 // temperature cannot be lower than that.
+                                  // temperature cannot be lower than that.
 }
 
 void HandleInvalidInput() {
   std::cout << "The given input was invalid." << std::endl << std::endl;
-  std::cin.clear();  // Clear the error from cin
+  std::cin.clear();               // Clear the error from cin
   std::cin.ignore(0xFFFF, '\n');  // Ignore (hopefully) all of the user input
                                   // currently in the buffer up to the next
                                   // new line.
 }
 }  // namespace monthlytemperatures
 
-int main() {
+int main(int argc, char* argv[]) {
+  bool runUnitTests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+    return 1;
+  }
+
+  if (runUnitTests) {
+    std::cout << "This program has no unit tests." << std::endl;
+    return 0;
+  }
+
   monthlytemperatures::Run();
   return 0;
 }

@@ -1,3 +1,7 @@
+# Project ignores
+## Build directory
+build
+
 # C++ ignores
 ## Prerequisites
 *.d
@@ -31,6 +35,3 @@
 *.exe
 *.out
 *.app
-
-## Miscellaneous
-compile_commands.json

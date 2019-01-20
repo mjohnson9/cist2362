@@ -83,6 +83,36 @@ std::string RequestInput<std::string>(
   return response;
 }
 
+bool ParseArgs(int argc, char* argv[], bool* runUnitTests) {
+  if (argc <= 1) {
+    // The only argument is the program name
+    return true;
+  }
+
+  if (runUnitTests == NULL) {  // Check for null pointer
+    throw new std::invalid_argument("runUnitTests");
+  }
+
+  bool badArg = false;
+  // Skip the first argument, since it's the program path
+  for (int i = 1; i < argc; i++) {
+    const std::string arg(argv[i]);  // convert to a std::string so that we
+                                     // don't have to use strcmp
+    if (arg == "-test") {
+      *runUnitTests = true;
+    } else {
+      badArg = true;
+      std::cout << "Unexpected argument: " << arg << std::endl;
+    }
+  }
+
+  if (badArg) {
+    return false;
+  }
+
+  return true;
+}
+
 void ClearScreen() {
   // It feels nasty forking a process to clear the screen, but it's a better
   // alternative to including something like ncurses

@@ -16,21 +16,15 @@ int CountWords(const char*);
 bool IsLetter(const char);
 
 void Run() {
-  mjohnson::common::ClearScreen();
-
-  if (RunUnitTests()) {
-    std::cout << "Unit tests passed." << std::endl;
-  } else {
-    std::cout << "Unit tests failed." << std::endl;
-    return;
-  }
-
   do {
-    std::cout << "" << std::endl;
+    mjohnson::common::ClearScreen();
+
     const std::string input = mjohnson::common::RequestInput<std::string>(
         "Enter a sentence or phrase to have its words counted:\n", NULL);
     const int words = CountWords(input);
-    std::cout << "\"" << input << "\" has " << words << " words in it."
+    std::cout << std::endl
+              << "\"" << input << "\" has " << words << " words in it."
+              << std::endl
               << std::endl;
   } while (mjohnson::common::RequestContinue());
 }
@@ -123,4 +117,24 @@ bool RunUnitTests() {
 }  // namespace wordcount
 }  // namespace mjohnson
 
-int main() { mjohnson::wordcount::Run(); }
+int main(int argc, char* argv[]) {
+  bool runUnitTests;
+  if (!mjohnson::common::ParseArgs(argc, argv, &runUnitTests)) {
+    return 1;
+  }
+
+  if (runUnitTests) {
+    const bool result = mjohnson::wordcount::RunUnitTests();
+
+    if (!result) {
+      std::cout << "Unit tests failed." << std::endl;
+      return 1;
+    }
+
+    std::cout << "Unit tests passed." << std::endl;
+    return 0;
+  }
+
+  mjohnson::wordcount::Run();
+  return 0;
+}

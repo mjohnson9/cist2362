@@ -24,6 +24,10 @@ template <>
 std::string RequestInput<std::string>(
     const std::string& prompt, std::function<bool(std::string)> validator);
 
+// ParseArgs parses the arguments passed to a program from the command line. It
+// takes pointers to certain flags that it sets as "return" values.
+bool ParseArgs(int argc, char* argv[], bool* runUnitTests);
+
 // RequestContinue prompts the user to ask if they would like to continue the
 // program. It continuously re-prompts on invalid input. Once valid input is
 // received, it returns the result.
