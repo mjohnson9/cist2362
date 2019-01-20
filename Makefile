@@ -6,7 +6,7 @@ SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | se
 SRCS := $(SRCS:$(SOURCE_DIR)/%=%)
 BINS := $(SRCS:%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
-TIDYS := $(SRCS:%=$(SOURCE_DIR)/%.tidy)
+TIDYS := $(SRCS:%=%.tidy)
 
 MKDIR_P := mkdir -p
 RM := trash
