@@ -8,17 +8,9 @@ compiler:
   - clang
   - gcc
 install:
-  - sudo pip install cpplint
-jobs:
-  include:
-    - stage: analysis
-      name: "Static analysis"
-      script:
-        - make -j1 lint
-        - make -j1 tidy
-    - stage: build
-      name: "Build programs"
-      script: make -j2 all
-    - stage: test
-      name: "Test programs"
-      script: make -j1 test
+  - sudo -i pip install cpplint
+script:
+  - make -j2 all
+  - make -j1 test
+  - make -j1 lint
+  - make -j1 tidy
