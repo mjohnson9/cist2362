@@ -83,6 +83,8 @@ std::string RequestInput<std::string>(
 }
 
 bool ParseArgs(int argc, char* argv[], bool* run_unit_tests) {
+  *run_unit_tests = false;
+
   if (argc <= 1) {
     // The only argument is the program name
     return true;
@@ -91,8 +93,6 @@ bool ParseArgs(int argc, char* argv[], bool* run_unit_tests) {
   if (run_unit_tests == nullptr) {  // Check for null pointer
     throw std::invalid_argument("run_unit_tests");
   }
-
-  *run_unit_tests = false;
 
   bool bad_arg = false;
   // Skip the first argument, since it's the program path
