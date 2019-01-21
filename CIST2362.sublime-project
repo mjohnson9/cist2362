@@ -3,16 +3,5 @@
 		{
 			"path": "."
 		}
-	],
-	"settings": {
-		"SublimeLinter": {
-			"linters": {
-				"clang++": {
-					"I": [
-						"${project_path}"
-					]
-				}
-			}
-		}
-	}
+	]
 }
