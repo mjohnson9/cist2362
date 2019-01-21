@@ -35,7 +35,7 @@ $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
 
 $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
-	"$(CLANG_TIDY)" $(TIDYFLAGS) "$(@:%.tidy=%)"
+	"$(CLANG_TIDY)" -header-filter="$(SOURCE_DIR)" $(TIDYFLAGS) "$(@:%.tidy=%)"
 
 $(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
 	"$(CPPLINT)" "$(@:%.lint=%)"
