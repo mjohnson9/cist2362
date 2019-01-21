@@ -9,10 +9,10 @@ compiler:
   - gcc
 install:
   - sudo -i pip install cpplint
-  - '[ "${TRAVIS_OS_NAME}" == "osx" ] && (brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy" && ls /usr/local/opt/llvm/bin) || true'
+  - '[ "${TRAVIS_OS_NAME}" == "osx" ] && (brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy" && ls "${CLANG_TIDY}") || true'
 before_script:
   - make -j1 lint
-  - make -j1 tidy
+  - env && make -j1 tidy
 script:
   - make -j2 all
   - make -j1 test
