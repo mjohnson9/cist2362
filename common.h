@@ -1,7 +1,6 @@
 // Copyright 2019 Michael Johnson
 
-#ifndef COMMON_H_
-#define COMMON_H_
+#pragma once
 
 #include <functional>
 #include <string>
@@ -40,5 +39,3 @@ bool RequestContinue();
 void ClearScreen();
 }  // namespace common
 }  // namespace mjohnson
-
-#endif  // COMMON_H_
