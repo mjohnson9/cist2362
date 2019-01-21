@@ -3,13 +3,15 @@ SOURCE_DIR := $(dir $(MAKEFILE_PATH))
 SOURCE_DIR := $(SOURCE_DIR:%/=%)
 BUILD_DIR := $(SOURCE_DIR)/build
 
-SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sed 's: :\\ :g')
+SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sort)
 BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
 LINTS := $(SRCS:%=%.lint)
 
 MKDIR_P ?= mkdir -p
+CPPLINT ?= cpplint
+CLANG_TIDY ?= clang-tidy
 
 CPPFLAGS ?= -std=c++11 -Wall -O0
 
@@ -33,10 +35,10 @@ $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
 
 $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
-	clang-tidy $(TIDYFLAGS) "$(@:%.tidy=%)"
+	"$(CLANG_TIDY)" $(TIDYFLAGS) "$(@:%.tidy=%)"
 
 $(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
-	cpplint "$(@:%.lint=%)"
+	"$(CPPLINT)" "$(@:%.lint=%)"
 
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 
