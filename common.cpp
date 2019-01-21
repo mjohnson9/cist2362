@@ -83,15 +83,16 @@ std::string RequestInput<std::string>(
 }
 
 bool ParseArgs(int argc, char* argv[], bool* run_unit_tests) {
-  *run_unit_tests = false;
+  if (run_unit_tests == nullptr) {  // Check for null pointer
+    throw std::invalid_argument("run_unit_tests");
+  }
+
+  *run_unit_tests = false;  // Initialize as false to prevent an uninitialized
+                            // variable in main
 
   if (argc <= 1) {
     // The only argument is the program name
     return true;
-  }
-
-  if (run_unit_tests == nullptr) {  // Check for null pointer
-    throw std::invalid_argument("run_unit_tests");
   }
 
   bool bad_arg = false;
