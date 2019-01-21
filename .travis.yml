@@ -12,7 +12,7 @@ install:
   - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy" && ls "${CLANG_TIDY}"; fi'
 before_script:
   - make -j1 lint
-  - env && make -j1 tidy
+  - make -j1 tidy
 script:
   - make -j2 all
   - make -j1 test
