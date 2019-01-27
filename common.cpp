@@ -166,7 +166,7 @@ bool ValidateContinueResponse(const std::string& response) {
 
 void ClearInputWhitespace() {
   char c = std::cin.peek();
-  if (!std::isspace(c)) {
+  if (std::isspace(c) == 0) {
     // The next character isn't whitespace; leave it alone
     return;
   }
@@ -182,11 +182,11 @@ void ClearInvalidInput() {
 
 void TrimString(std::string* str) {
   str->erase(str->begin(), std::find_if(str->begin(), str->end(), [](int c) {
-               return !std::isspace(c);
+               return std::isspace(c) == 0;
              }));  // Erase the string from the beginning until the last
                    // whitespace character
   str->erase(std::find_if(str->rbegin(), str->rend(),
-                          [](int c) { return !std::isspace(c); })
+                          [](int c) { return std::isspace(c) == 0; })
                  .base(),
              str->end());  // Erase the string from the last whitespace
                            // character (searching right to left) to the end
