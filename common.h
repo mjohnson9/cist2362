@@ -37,5 +37,8 @@ bool RequestContinue();
 // ClearScreen clears all text from the screen. It operates independent of
 // platform.
 void ClearScreen();
+
+// TrimString trims the whitespace from both ends of the string
+void TrimString(std::string* str);
 }  // namespace common
 }  // namespace mjohnson

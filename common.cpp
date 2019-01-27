@@ -8,18 +8,10 @@
 
 namespace mjohnson {
 namespace common {
+// ClearInputWhitespace clears the trailing whitespace after a read from cin
+void ClearInputWhitespace();
 // ClearInvalidInput clears invalid input from cin and resets any error flags
 void ClearInvalidInput();
-
-// GetTypeName converts a type name into a user friendly type name
-template <typename T>
-std::string GetTypeName();
-template <>
-std::string GetTypeName<int>();
-template <>
-std::string GetTypeName<float>();
-template <>
-std::string GetTypeName<double>();
 
 template <typename T>
 T RequestInput(const std::string& prompt,
@@ -29,29 +21,25 @@ T RequestInput(const std::string& prompt,
   do {
     std::cout << prompt;
     std::cin >> response;
+    ClearInputWhitespace();
 
     if (std::cin.fail()) {  // cin.fail returns true when we attempt to extract
                             // a type from the stream, but the data that the
                             // user entered cannot be converted to that type.
-      ClearScreen();
-      const std::string type_name = GetTypeName<T>();
-      std::cout << "You have given an invalid " << type_name
-                << ". Please provide a valid " << type_name << ".";
+      std::cout << "You have given an invalid answer. Please answer the "
+                   "question with a valid input."
+                << std::endl
+                << std::endl;
       valid = false;
       ClearInvalidInput();
       continue;  // Fail fast and attempt another prompt
     }
 
-    ClearScreen();
     if (validator) {  // Validator has a bool operator that tells us whether or
                       // not the function is empty
       valid = validator(response);
     } else {
       valid = true;
-    }
-
-    if (!valid) {
-      ClearInvalidInput();
     }
   } while (!valid);
 
@@ -70,7 +58,6 @@ std::string RequestInput<std::string>(
     std::cout << prompt;
     std::getline(std::cin, response);
 
-    ClearScreen();
     if (validator) {  // Validator has a bool operator that tells us whether or
                       // not the function is empty
       valid = validator(response);
@@ -177,31 +164,41 @@ bool ValidateContinueResponse(const std::string& response) {
   return is_valid;
 }
 
+void ClearInputWhitespace() {
+  char c = std::cin.peek();
+  if (!std::isspace(c)) {
+    // The next character isn't whitespace; leave it alone
+    return;
+  }
+  std::cin.ignore();  // Ignore the whitespace
+}
+
 void ClearInvalidInput() {
-  std::cin.clear();  // Clear the error from cin
+  std::cin.clear();  // clear the error from cin
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
                   '\n');  // Ignore all of the user input currently in the
                           // buffer up to the next new line.
 }
 
-template <typename T>
-std::string GetTypeName() {
-  // There's no specialized function for this type; throw an exception, because
-  // we can't identify it
-  throw std::invalid_argument("T");
+void TrimString(std::string* str) {
+  str->erase(str->begin(), std::find_if(str->begin(), str->end(), [](int c) {
+               return !std::isspace(c);
+             }));  // Erase the string from the beginning until the last
+                   // whitespace character
+  str->erase(std::find_if(str->rbegin(), str->rend(),
+                          [](int c) { return !std::isspace(c); })
+                 .base(),
+             str->end());  // Erase the string from the last whitespace
+                           // character (searching right to left) to the end
 }
-template <>
-std::string GetTypeName<int>() {
-  return "integer";
-}
-template <>
-std::string GetTypeName<float>() {
-  return "number";
-}
-template <>
-std::string GetTypeName<double>() {
-  return "number";
-}
+
+// Instantiate RequestInput templates for needed types
+template int32_t RequestInput<int32_t>(
+    const std::string& prompt, const std::function<bool(int32_t)>& validator);
+template size_t RequestInput<size_t>(
+    const std::string& prompt, const std::function<bool(size_t)>& validator);
+template double RequestInput<double>(
+    const std::string& prompt, const std::function<bool(double)>& validator);
 
 }  // namespace common
 }  // namespace mjohnson
