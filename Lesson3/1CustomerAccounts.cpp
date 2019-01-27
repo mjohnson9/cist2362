@@ -443,7 +443,6 @@ bool ValidateAccountBalance(double balance) {
 }  // namespace mjohnson
 
 int main(int argc, char* argv[]) {
-  std::cout << std::isspace('\n') << std::endl;
   bool run_unit_tests;
   if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
