@@ -59,10 +59,12 @@ float CalculateRoyalties(RoyaltyOption option, int copies, float net_price) {
     case FIRST:
       return 5000.0f + 20000.0f;
     case SECOND:
-      return copies * (net_price * 0.125f);
+      return static_cast<float>(copies) * (net_price * 0.125f);
     case THIRD:
-      return (std::min(4000, copies) * (net_price * 0.10f)) +
-             (std::max(0, copies - 4000) * (net_price * 0.14f));
+      return (static_cast<float>(std::min(4000, copies)) *
+              (net_price * 0.10f)) +
+             (static_cast<float>(std::max(0, copies - 4000)) *
+              (net_price * 0.14f));
     default:
       // If we received a royalty option that we don't know about, throw an
       // exception for the caller to handle or the program to terminate.
