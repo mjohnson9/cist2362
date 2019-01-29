@@ -165,7 +165,7 @@ bool ValidateContinueResponse(const std::string& response) {
 }
 
 void ClearInputWhitespace() {
-  char c = std::cin.peek();
+  char c = static_cast<char>(std::cin.peek());
   if (std::isspace(c) == 0) {
     // The next character isn't whitespace; leave it alone
     return;

@@ -77,7 +77,7 @@ void RequestName(const std::string& prompt, char* buffer, size_t buffer_size) {
     mjohnson::common::ClearScreen();
 
     std::cout << prompt;
-    std::cin.getline(buffer, buffer_size);
+    std::cin.getline(buffer, static_cast<std::streamsize>(buffer_size));
 
     TrimSpaces(buffer, buffer_size);
 

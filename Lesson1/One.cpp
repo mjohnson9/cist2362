@@ -41,7 +41,7 @@ void PrintRoyalties(int copies, float net_price);
 // prepares cin for another attempt.
 void HandleInvalidInput();
 // RoyaltyOptionToString gives a proper name for a royalty option.
-std::string RoyaltyOptionToString(int option_index, bool lowercase);
+std::string RoyaltyOptionToString(size_t option_index, bool lowercase);
 
 // Provides the primary run loop for the program.
 void Run() {
@@ -88,7 +88,7 @@ void PrintRoyalties(int copies, float net_price) {
   std::cout.unsetf(std::ios_base::floatfield);
 
   // Find the largest royalty's index
-  int largest_royalty = 0;
+  size_t largest_royalty = 0;
   bool largest_royalties[num_royalties] = {true, false, false};
 
   for (size_t i = 1; i < num_royalties; i++) {
@@ -196,7 +196,7 @@ bool RequestContinue() {
     {  // Put this in its own scope to reduce scope pollution
       char next_char;
       do {
-        next_char = std::cin.peek();
+        next_char = static_cast<char>(std::cin.peek());
         if (next_char == '\r' || next_char == '\n') {
           std::cin.get(next_char);  // Remove the newline from the buffer
         }
@@ -239,7 +239,7 @@ void HandleInvalidInput() {
                                   // new line.
 }
 
-std::string RoyaltyOptionToString(int option_index, bool lowercase) {
+std::string RoyaltyOptionToString(size_t option_index, bool lowercase) {
   switch (option_index) {
     case 0:
       return lowercase ? "first" : "First";

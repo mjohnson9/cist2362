@@ -214,7 +214,7 @@ bool RequestContinue() {
     {  // Put this in its own scope to reduce scope pollution
       char next_char;
       do {
-        next_char = std::cin.peek();
+        next_char = static_cast<char>(std::cin.peek());
         if (next_char == '\r' || next_char == '\n') {
           std::cin.get(next_char);  // Remove the newline from the buffer
         }

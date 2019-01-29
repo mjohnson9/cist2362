@@ -39,7 +39,7 @@ uint8_t CharToNum(const char c) {
   if (!IsNumber(c)) {
     throw std::invalid_argument("c");
   }
-  return (9 - ('9' - c));
+  return static_cast<uint8_t>(c - '0');
 }
 
 bool IsNumber(const char c) { return (c >= '0' && c <= '9'); }

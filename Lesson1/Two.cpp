@@ -26,7 +26,8 @@ double CalculateInterest(double loan, double interest_rate);
 // CalculateNumberOfMonths calculates and returns the number of months it will
 // take to pay off a loan with the given parameters. It returns -1 when a loan
 // will never be paid off.
-int CalculateNumberOfMonths(double loan, double interest_rate, double payment);
+double CalculateNumberOfMonths(double loan, double interest_rate,
+                               double payment);
 // Validator function for use in RequestInput. Validates that the given double
 // is greater than 0.
 bool ValidatePositiveFloat(double to_check);
@@ -64,7 +65,7 @@ void Run() {
       continue;  // Go to the next iteration of the loop
     }
 
-    int num_months = CalculateNumberOfMonths(loan, interest_rate, payment);
+    double num_months = CalculateNumberOfMonths(loan, interest_rate, payment);
 
     std::cout << std::endl
               << "It will take " << num_months << " "
@@ -74,10 +75,11 @@ void Run() {
   } while (RequestContinue());
 }
 
-int CalculateNumberOfMonths(double loan, double interest_rate, double payment) {
+double CalculateNumberOfMonths(double loan, double interest_rate,
+                               double payment) {
   const double monthly_interest_rate = interest_rate / 12.0f;
   // I love Wolfram|Alpha
-  uint64_t num_months =
+  double num_months =
       ceil(-(std::log(1.0f - ((loan * monthly_interest_rate) / payment)) /
              std::log(1.0f + monthly_interest_rate)));
   return num_months;
@@ -155,7 +157,7 @@ bool RequestContinue() {
     {  // Put this in its own scope to reduce scope pollution
       char next_char;
       do {
-        next_char = std::cin.peek();
+        next_char = static_cast<char>(std::cin.peek());
         if (next_char == '\r' || next_char == '\n') {
           std::cin.get(next_char);  // Remove the newline from the buffer
         }
