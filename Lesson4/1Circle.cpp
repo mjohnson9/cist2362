@@ -82,7 +82,7 @@ bool ValidateRadius(double r) {
 // RunUnitTests runs the program's unit tests and returns the success or failure
 // of those unit tests as a boolean.
 bool RunUnitTests() {
-  static constexpr double PI = 3.14159;
+  constexpr double PI = 3.14159;
 
   bool success = true;
 
