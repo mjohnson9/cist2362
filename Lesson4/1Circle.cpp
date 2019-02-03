@@ -82,8 +82,6 @@ bool ValidateRadius(double r) {
 // RunUnitTests runs the program's unit tests and returns the success or failure
 // of those unit tests as a boolean.
 bool RunUnitTests() {
-  constexpr double PI = 3.14159;
-
   bool success = true;
 
   Circle test;
@@ -110,7 +108,9 @@ bool RunUnitTests() {
     success = false;
   }
 
+  constexpr double PI = 3.14159;
   constexpr double TEST_RADIUS = 2.5l;
+
   test.SetRadius(TEST_RADIUS);
 
   if (test.Radius() != TEST_RADIUS) {
