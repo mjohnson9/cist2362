@@ -13,7 +13,7 @@ MKDIR_P ?= mkdir -p
 CPPLINT ?= cpplint
 CLANG_TIDY ?= clang-tidy
 
-CPPFLAGS ?= -std=c++11 -Wall -Wconversion -Wextra -Werror -pedantic-errors -O0 -g
+CPPFLAGS ?= -std=c++11 -Wall -Wconversion -Wextra -Werror -pedantic-errors -ffast-math -O0 -g
 
 TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
