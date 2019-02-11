@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include <gmp.h>
+#include <gmpxx.h>
+
 #include "../common.h"
 
 namespace mjohnson {
@@ -9,7 +12,7 @@ namespace circle {
 
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
-uint64_t CalculateFactorial(uint64_t n);
+mpz_class CalculateFactorial(mpz_class n);
 
 // MAIN FUNCTIONS
 int Run() {
@@ -17,21 +20,19 @@ int Run() {
   // decimal points in the locale of the user.
   std::cout.imbue(std::locale(""));
 
-  do {
-    mjohnson::common::ClearScreen();
-
+  while(true) {
     const auto n = mjohnson::common::RequestInput<uint64_t>("n = ", NULL);
 
-    uint64_t factorial = CalculateFactorial(n);
+    const mpz_class factorial = CalculateFactorial(n);
 
     std::cout << "n! = " << factorial << std::endl;
-  } while (mjohnson::common::RequestContinue());
+  }
 
   return 0;
 }
 
 // UTILITY FUNCTIONS
-uint64_t CalculateFactorial(uint64_t n) {
+mpz_class CalculateFactorial(mpz_class n) {
   if (n == 0) {
     return 1;
   }

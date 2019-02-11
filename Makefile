@@ -28,6 +28,10 @@ $(BUILD_DIR)/common.o: $(SOURCE_DIR)/common.cpp $(SOURCE_DIR)/common.h
 	@$(MKDIR_P) "$(dir $@)"
 	$(COMPILE.cpp) "$<" -o "$@"
 
+$(BUILD_DIR)/Lesson5/Factorial: $(SOURCE_DIR)/Lesson5/Factorial.cpp $(BUILD_DIR)/common.o
+	@$(MKDIR_P) "$(dir $@)"
+	$(LINK.cpp) "$<" "$(BUILD_DIR)/common.o" -lgmpxx -lgmp -o "$@"
+
 $(BUILD_DIR)/%: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)/common.o
 	@$(MKDIR_P) "$(dir $@)"
 	$(LINK.cpp) "$<" "$(BUILD_DIR)/common.o" -o "$@"
