@@ -33,10 +33,11 @@ int Run() {
 
 // UTILITY FUNCTIONS
 mpz_class CalculateFactorial(mpz_class n) {
-  if (n == 0) {
-    return 1;
+  mpz_class result = n;
+  for(mpz_class i = n - 1; i > 0; i--) {
+    result *= i;
   }
-  return n * CalculateFactorial(n - 1);
+  return result;
 }
 
 // UNIT TESTING
