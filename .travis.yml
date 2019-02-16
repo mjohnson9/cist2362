@@ -7,12 +7,24 @@ osx_image: xcode10.1
 compiler:
   - clang
   - gcc
-install:
-  - sudo -i pip install cpplint
-  - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy" && ls "${CLANG_TIDY}"; fi'
-before_script:
-  - make -j1 lint
-  - make -j1 tidy
-script:
-  - make -j2 all
-  - make -j1 test
+stages:
+  - lint
+  - test
+jobs:
+  include:
+    - stage: lint
+      compiler: clang
+      os: osx
+      install:
+        - sudo -i pip install cpplint
+        - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy"; fi'
+      script:
+        - make -j1 lint
+        - make -j1 tidy
+    - stage: test
+      install:
+        - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install coreutils && export NPROC="$(gnproc)"; else sudo apt-get install -y coreutils && export NPROC="$(nproc)" fi'
+        - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install gmp && export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}/usr/local/lib"; fi'
+      script:
+        - make "-j${NPROC}" all
+        - make -j1 test

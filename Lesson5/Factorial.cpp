@@ -17,7 +17,7 @@ namespace circle {
 
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
-mpz_class CalculateFactorial(mpz_class n);
+mpz_class CalculateFactorial(const mpz_class& n);
 // GetTimeString gets a human-readable duration from a duration<double>
 std::string GetTimeString(std::chrono::duration<double> duration);
 
@@ -28,11 +28,12 @@ int Run() {
   std::cout.imbue(std::locale(""));
 
   do {
-    const auto n = mjohnson::common::RequestInput<uint64_t>("n = ", NULL);
+    const auto n = mjohnson::common::RequestInput<int32_t>("n = ", NULL);
+    const mpz_class n_bigint(n);
 
     const std::chrono::high_resolution_clock::time_point begin =
         std::chrono::high_resolution_clock::now();
-    const mpz_class factorial = CalculateFactorial(n);
+    const mpz_class factorial = CalculateFactorial(n_bigint);
     const std::chrono::high_resolution_clock::time_point end =
         std::chrono::high_resolution_clock::now();
 
@@ -47,7 +48,7 @@ int Run() {
 }
 
 // UTILITY FUNCTIONS
-mpz_class CalculateFactorial(mpz_class n) {
+mpz_class CalculateFactorial(const mpz_class& n) {
   static std::map<mpz_class, mpz_class> result_table;
 
   {
