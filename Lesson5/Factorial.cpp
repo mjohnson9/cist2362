@@ -3,7 +3,7 @@
 #include <gmp.h>
 #include <gmpxx.h>
 
-#include <chrono>
+#include <chrono>  // NOLINT(build/c++11)
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -28,7 +28,7 @@ int Run() {
   std::cout.imbue(std::locale(""));
 
   do {
-    const auto n = mjohnson::common::RequestInput<int32_t>("n = ", NULL);
+    const auto n = mjohnson::common::RequestInput<uint32_t>("n = ", nullptr);
     const mpz_class n_bigint(n);
 
     const std::chrono::high_resolution_clock::time_point begin =
