@@ -1,12 +1,5 @@
 language: cpp
 sudo: required
-os:
-  - linux
-  - osx
-osx_image: xcode10.1
-compiler:
-  - clang
-  - gcc
 stages:
   - lint
   - test
@@ -22,6 +15,13 @@ jobs:
         - make -j1 lint
         - make -j1 tidy
     - stage: test
+      os:
+        - linux
+        - osx
+      osx_image: xcode10.1
+      compiler:
+        - clang
+        - gcc
       install:
         - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install coreutils && export NPROC="$(gnproc)"; else sudo apt-get install -y coreutils && export NPROC="$(nproc)" fi'
         - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install gmp && export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}/usr/local/lib"; fi'
