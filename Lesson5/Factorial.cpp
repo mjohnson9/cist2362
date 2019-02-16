@@ -1,14 +1,14 @@
 // Copyright 2019 Michael Johnson
 
+#include <gmp.h>
+#include <gmpxx.h>
+
 #include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <sstream>
-
-#include <gmp.h>
-#include <gmpxx.h>
 
 #include "../common.h"
 
@@ -30,14 +30,18 @@ int Run() {
   do {
     const auto n = mjohnson::common::RequestInput<uint64_t>("n = ", NULL);
 
-    const std::chrono::high_resolution_clock::time_point begin = std::chrono::high_resolution_clock::now();
+    const std::chrono::high_resolution_clock::time_point begin =
+        std::chrono::high_resolution_clock::now();
     const mpz_class factorial = CalculateFactorial(n);
-    const std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+    const std::chrono::high_resolution_clock::time_point end =
+        std::chrono::high_resolution_clock::now();
 
     const std::chrono::duration<double> execution_seconds = end - begin;
 
-    std::cout << "n! = " << factorial << std::endl << "Executed in " << GetTimeString(execution_seconds) << "." << std::endl;
-  } while(mjohnson::common::RequestContinue());
+    std::cout << "n! = " << factorial << std::endl
+              << "Executed in " << GetTimeString(execution_seconds) << "."
+              << std::endl;
+  } while (mjohnson::common::RequestContinue());
 
   return 0;
 }
@@ -48,7 +52,7 @@ mpz_class CalculateFactorial(mpz_class n) {
 
   {
     const mpz_class& initial_lookup = result_table[n];
-    if(initial_lookup != 0) {
+    if (initial_lookup != 0) {
       // Shortcut: Result is already stored in lookup table
       return initial_lookup;
     }
@@ -56,9 +60,9 @@ mpz_class CalculateFactorial(mpz_class n) {
 
   mpz_class i = n;
   mpz_class result = 1;
-  for(; i > 0; i--) {
+  for (; i > 0; i--) {
     const mpz_class& lookup_result = result_table[i];
-    if(lookup_result == 0) {
+    if (lookup_result == 0) {
       // The result isn't in the table; skip this iteration
       continue;
     }
@@ -68,7 +72,7 @@ mpz_class CalculateFactorial(mpz_class n) {
     break;
   }
 
-  for(mpz_class j = i + 1; j <= n; j++) {
+  for (mpz_class j = i + 1; j <= n; j++) {
     result *= j;
     result_table[j] = result;
   }
@@ -76,43 +80,44 @@ mpz_class CalculateFactorial(mpz_class n) {
   return result;
 }
 
-
 std::string GetTimeString(std::chrono::duration<double> duration_s) {
   std::stringstream result_stream;
   result_stream << std::fixed << std::setprecision(0);
   auto hours = std::chrono::duration_cast<std::chrono::hours>(duration_s);
-  if(hours.count() > 1) {
+  if (hours.count() > 1) {
     result_stream << hours.count() << "h";
     duration_s -= hours;
   }
   auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration_s);
-  if(minutes.count() > 1) {
+  if (minutes.count() > 1) {
     result_stream << minutes.count() << "m";
     duration_s -= minutes;
   }
   auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration_s);
-  if(seconds.count() > 1) {
+  if (seconds.count() > 1) {
     result_stream << seconds.count() << "s";
     duration_s -= seconds;
   }
-  auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration_s);
-  if(milliseconds.count() > 1) {
+  auto milliseconds =
+      std::chrono::duration_cast<std::chrono::milliseconds>(duration_s);
+  if (milliseconds.count() > 1) {
     result_stream << milliseconds.count() << "ms";
     duration_s -= milliseconds;
   }
-  auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(duration_s);
-  if(microseconds.count() > 1) {
+  auto microseconds =
+      std::chrono::duration_cast<std::chrono::microseconds>(duration_s);
+  if (microseconds.count() > 1) {
     result_stream << microseconds.count() << "us";
     duration_s -= microseconds;
   }
-  auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(duration_s);
-  if(nanoseconds.count() > 1) {
+  auto nanoseconds =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(duration_s);
+  if (nanoseconds.count() > 1) {
     result_stream << nanoseconds.count() << "ns";
   }
 
   return result_stream.str();
 }
-
 
 // UNIT TESTING
 
@@ -123,7 +128,7 @@ bool RunUnitTests() { return true; }
 }  // namespace circle
 }  // namespace mjohnson
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   bool run_unit_tests;
   if (!mjohnson::common::ParseArgs(argc, argv, &run_unit_tests)) {
     return 1;
