@@ -195,6 +195,8 @@ void TrimString(std::string* str) {
 // Instantiate RequestInput templates for needed types
 template int32_t RequestInput<int32_t>(
     const std::string& prompt, const std::function<bool(int32_t)>& validator);
+template uint32_t RequestInput<uint32_t>(
+    const std::string& prompt, const std::function<bool(uint32_t)>& validator);
 template uint64_t RequestInput<uint64_t>(
     const std::string& prompt, const std::function<bool(uint64_t)>& validator);
 template size_t RequestInput<size_t>(
