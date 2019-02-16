@@ -21,7 +21,7 @@ jobs:
       os: osx
       install:
         - sudo -i pip install cpplint
-        - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy"; fi'
+        - 'brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy"'
       script:
         - make -j1 lint
         - make -j1 tidy
