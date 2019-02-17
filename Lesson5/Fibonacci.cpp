@@ -160,7 +160,26 @@ bool ValidateFibonacci(uint32_t n) {
 
 // RunUnitTests runs the program's unit tests and returns the success or
 // failure of those unit tests as a boolean.
-bool RunUnitTests() { return true; }
+bool RunUnitTests() {
+  const size_t NUM_RESULTS = 21;
+  static const bigint expected_result[NUM_RESULTS] = {
+      0,  1,   1,   2,   3,   5,   8,    13,   21,   34,  55,
+      89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765};
+
+  bool test_result = true;
+
+  for (size_t i = 0; i < NUM_RESULTS; i++) {
+    const bigint result = CalculateFibonacci(i);
+    const bigint expected = expected_result[i];
+    if (result != expected) {
+      std::cout << "FAIL: " << i << "!: Expected " << expected << ", got "
+                << result << std::endl;
+      test_result = false;
+    }
+  }
+
+  return test_result;
+}
 
 }  // namespace circle
 }  // namespace mjohnson
