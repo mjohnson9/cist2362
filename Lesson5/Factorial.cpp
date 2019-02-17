@@ -135,8 +135,8 @@ bool ValidateFactorial(uint32_t n) {
 // RunUnitTests runs the program's unit tests and returns the success or failure
 // of those unit tests as a boolean.
 bool RunUnitTests() {
-  const size_t num_results = 21;
-  static const bigint expected_result[num_results] = {1,
+  const size_t NUM_RESULTS = 21;
+  static const bigint expected_result[NUM_RESULTS] = {1,
                                                       1,
                                                       2,
                                                       6,
@@ -160,7 +160,7 @@ bool RunUnitTests() {
 
   bool test_result = true;
 
-  for (size_t i = 0; i < num_results; i++) {
+  for (size_t i = 0; i < NUM_RESULTS; i++) {
     const bigint result = CalculateFactorial(i);
     const bigint expected = expected_result[i];
     if (result != expected) {
