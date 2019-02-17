@@ -11,43 +11,6 @@
 
 namespace mjohnson {
 namespace common {
-// ClearInputWhitespace clears the trailing whitespace after a read from cin
-void ClearInputWhitespace();
-// ClearInvalidInput clears invalid input from cin and resets any error flags
-void ClearInvalidInput();
-
-template <typename T>
-T RequestInput(const std::string& prompt,
-               const std::function<bool(T)>& validator) {
-  bool valid = true;
-  T response;
-  do {
-    std::cout << prompt;
-    std::cin >> response;
-    ClearInputWhitespace();
-
-    if (std::cin.fail()) {  // cin.fail returns true when we attempt to extract
-                            // a type from the stream, but the data that the
-                            // user entered cannot be converted to that type.
-      std::cout << "You have given an invalid answer. Please answer the "
-                   "question with a valid input."
-                << std::endl
-                << std::endl;
-      valid = false;
-      ClearInvalidInput();
-      continue;  // Fail fast and attempt another prompt
-    }
-
-    if (validator) {  // Validator has a bool operator that tells us whether or
-                      // not the function is empty
-      valid = validator(response);
-    } else {
-      valid = true;
-    }
-  } while (!valid);
-
-  return response;
-}
 
 // This is a specialization for string. It reads entire lines instead of a
 // single word.
@@ -238,7 +201,7 @@ void TrimString(std::string* str) {
 }
 
 // Instantiate RequestInput templates for needed types
-template int32_t RequestInput<int32_t>(
+/*template int32_t RequestInput<int32_t>(
     const std::string& prompt, const std::function<bool(int32_t)>& validator);
 template uint32_t RequestInput<uint32_t>(
     const std::string& prompt, const std::function<bool(uint32_t)>& validator);
@@ -246,8 +209,10 @@ template uint64_t RequestInput<uint64_t>(
     const std::string& prompt, const std::function<bool(uint64_t)>& validator);
 template size_t RequestInput<size_t>(
     const std::string& prompt, const std::function<bool(size_t)>& validator);
+template float RequestInput<float>(const std::string& prompt,
+                                   const std::function<bool(float)>& validator);
 template double RequestInput<double>(
-    const std::string& prompt, const std::function<bool(double)>& validator);
+    const std::string& prompt, const std::function<bool(double)>& validator);*/
 
 }  // namespace common
 }  // namespace mjohnson
