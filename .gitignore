@@ -2,6 +2,9 @@
 ## Build directory
 build
 
+## Compile commands
+compile_commands.json
+
 # C++ ignores
 ## Prerequisites
 *.d
