@@ -18,18 +18,16 @@ namespace mjohnson {
 namespace circle {
 
 #ifdef USE_GMP
-typedef mpz_class bigint;
+using bigint = mpz_class;
 #else
-typedef uint64_t bigint;
+using bigint = uint64_t;
 #endif
 
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
-bigint CalculateFactorial(const bigint n);
+bigint CalculateFactorial(const bigint& n);
 // ValidateFactorial validates a user input factorial request
 bool ValidateFactorial(uint32_t n);
-// GetTimeString gets a human-readable duration from a duration<double>
-std::string GetTimeString(std::chrono::duration<double> duration);
 
 // MAIN FUNCTIONS
 int Run() {
@@ -61,7 +59,7 @@ int Run() {
 }
 
 // UTILITY FUNCTIONS
-bigint CalculateFactorial(const bigint n) {
+bigint CalculateFactorial(const bigint& n) {
   if (n == 0 || n == 1) {
     return 1;
   }
@@ -137,8 +135,8 @@ bool ValidateFactorial(uint32_t n) {
 // RunUnitTests runs the program's unit tests and returns the success or failure
 // of those unit tests as a boolean.
 bool RunUnitTests() {
-  const size_t NUM_RESULTS = 21;
-  static const bigint expected_result[NUM_RESULTS] = {1,
+  const size_t num_results = 21;
+  static const bigint expected_result[num_results] = {1,
                                                       1,
                                                       2,
                                                       6,
@@ -162,7 +160,7 @@ bool RunUnitTests() {
 
   bool test_result = true;
 
-  for (size_t i = 0; i < NUM_RESULTS; i++) {
+  for (size_t i = 0; i < num_results; i++) {
     const bigint result = CalculateFactorial(i);
     const bigint expected = expected_result[i];
     if (result != expected) {
