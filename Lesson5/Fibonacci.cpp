@@ -18,14 +18,14 @@ namespace mjohnson {
 namespace circle {
 
 #ifdef USE_GMP
-typedef mpz_class bigint;
+using bigint = mpz_class;
 #else
-typedef uint64_t bigint;
+using bigint = uint64_t;
 #endif
 
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
-bigint CalculateFibonacci(const bigint n);
+bigint CalculateFibonacci(const bigint& n);
 // ValidateFibonacci validates user input and limits it to reasonable numbers
 bool ValidateFibonacci(uint32_t n);
 // GetTimeString gets a human-readable duration from a duration<double>
@@ -61,7 +61,7 @@ int Run() {
 }
 
 // UTILITY FUNCTIONS
-bigint CalculateFibonacci(const bigint n) {
+bigint CalculateFibonacci(const bigint& n) {
   // Known values
   if (n == 0) {
     return 0;
