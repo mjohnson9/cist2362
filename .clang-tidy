@@ -12,7 +12,8 @@ Checks: >-
   readability-*,
   performance-*,
   -bugprone-exception-escape,
-  -clang-diagnostic-unused-command-line-argument
+  -clang-diagnostic-unused-command-line-argument,
+  -readability-identifier-naming
 
 # Enable most warnings as errors.
 WarningsAsErrors: >-
