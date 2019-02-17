@@ -24,20 +24,17 @@ TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
 
 all: $(BINS)
 
-$(BUILD_DIR)/common.a: $(BUILD_DIR)/common.o
-	$(AR) -cvq "$@" "$<"
-
 $(BUILD_DIR)/common.o: $(SOURCE_DIR)/common.cpp $(SOURCE_DIR)/common.h
 	@$(MKDIR_P) "$(dir $@)"
 	$(COMPILE.cpp) "$<" -o "$@"
 
-$(BUILD_DIR)/Lesson5/%: $(SOURCE_DIR)/Lesson5/%.cpp $(BUILD_DIR)/common.a
+$(BUILD_DIR)/Lesson5/%: $(SOURCE_DIR)/Lesson5/%.cpp $(BUILD_DIR)/common.o
 	@$(MKDIR_P) "$(dir $@)"
-	$(LINK.cpp) "$(BUILD_DIR)/common.a" "$<" -DUSE_GMP -lgmpxx -lgmp -o "$@"
+	$(LINK.cpp) "$(BUILD_DIR)/common.o" "$<" -DUSE_GMP -lgmpxx -lgmp -o "$@"
 
-$(BUILD_DIR)/%: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)/common.a
+$(BUILD_DIR)/%: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)/common.o
 	@$(MKDIR_P) "$(dir $@)"
-	$(LINK.cpp) "$(BUILD_DIR)/common.a" "$<" -o "$@"
+	$(LINK.cpp) "$(BUILD_DIR)/common.o" "$<" -o "$@"
 
 $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
