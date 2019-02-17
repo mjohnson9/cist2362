@@ -3,7 +3,7 @@
 #ifdef USE_GMP
 #include <gmp.h>
 #include <gmpxx.h>
-#endif
+#endif  // USE_GMP
 
 #include <chrono>  // NOLINT(build/c++11)
 #include <cmath>
@@ -21,7 +21,7 @@ namespace circle {
 using bigint = mpz_class;
 #else
 using bigint = uint64_t;
-#endif
+#endif  // USE_GMP
 
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
@@ -151,7 +151,7 @@ bool ValidateFibonacci(uint32_t n) {
         << std::endl;
     return false;
   }
-#endif
+#endif  // USE_GMP
 
   return true;
 }  // namespace circle
