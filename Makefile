@@ -14,7 +14,7 @@ CPPLINT ?= cpplint
 CLANG_TIDY ?= clang-tidy
 
 CPPOPTIMIZATION ?= 0
-CPPFLAGS ?= -std=c++11 -Wall -Wconversion -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv -march=native -mtune=native -O$(CPPOPTIMIZATION) -g
+CPPFLAGS ?= -std=c++11 -Wall -Wconversion -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv -O$(CPPOPTIMIZATION) -g
 
 TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
