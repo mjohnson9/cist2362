@@ -23,7 +23,7 @@ jobs:
         - sudo -i pip install cpplint
         - sudo -i pip install compiledb
         - 'brew install llvm && export CLANG_TIDY="/usr/local/opt/llvm/bin/clang-tidy"'
-        - 'brew install coreutils && export NPROC="$(gnproc)"'
+        - '(brew list coreutils &>/dev/null || brew install coreutils) && export NPROC="$(gnproc)"'
       before_script:
         - compiledb -f make "-j${NPROC}" all
       script:
@@ -31,7 +31,7 @@ jobs:
         - make -j1 tidy
 
 install:
-  - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install coreutils && export NPROC="$(gnproc)"; else sudo apt-get install -y coreutils && export NPROC="$(nproc)"; fi'
+  - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then (brew list coreutils &>/dev/null || brew install coreutils) && export NPROC="$(gnproc)"; else sudo apt-get install -y coreutils && export NPROC="$(nproc)"; fi'
   - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install gmp && export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}/usr/local/lib"; fi'
 script:
   - make "-j${NPROC}" all
