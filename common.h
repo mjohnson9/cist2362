@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <chrono>  // NOLINT(build/c++11)
 #include <functional>
 #include <string>
 
@@ -32,11 +33,15 @@ bool ParseArgs(int argc, char* argv[], bool* run_unit_tests);
 // RequestContinue prompts the user to ask if they would like to continue the
 // program. It continuously re-prompts on invalid input. Once valid input is
 // received, it returns the result.
+bool RequestContinue(const std::string& prompt);
 bool RequestContinue();
 
 // ClearScreen clears all text from the screen. It operates independent of
 // platform.
 void ClearScreen();
+
+// GetTimeString formats a chrono::duration as a human-readable string
+std::string GetTimeString(std::chrono::duration<double> duration_s);
 
 // TrimString trims the whitespace from both ends of the string
 void TrimString(std::string* str);

@@ -1,7 +1,9 @@
 // Copyright 2019 Michael Johnson
 
+#ifdef USE_GMP
 #include <gmp.h>
 #include <gmpxx.h>
+#endif
 
 #include <chrono>  // NOLINT(build/c++11)
 #include <cmath>
@@ -15,9 +17,17 @@
 namespace mjohnson {
 namespace circle {
 
+#ifdef USE_GMP
+typedef mpz_class bigint;
+#else
+typedef uint64_t bigint;
+#endif
+
 // FORWARD DECLARATIONS
 // CalculateFactorial calculates the factorial of n
-mpz_class CalculateFactorial(const mpz_class& n);
+bigint CalculateFactorial(const bigint n);
+// ValidateFactorial validates a user input factorial request
+bool ValidateFactorial(uint32_t n);
 // GetTimeString gets a human-readable duration from a duration<double>
 std::string GetTimeString(std::chrono::duration<double> duration);
 
@@ -28,19 +38,22 @@ int Run() {
   std::cout.imbue(std::locale(""));
 
   do {
-    const auto n = mjohnson::common::RequestInput<uint32_t>("n = ", nullptr);
-    const mpz_class n_bigint(n);
+    const auto n =
+        mjohnson::common::RequestInput<uint32_t>("n = ", ValidateFactorial);
+
+    const bigint n_converted(n);
 
     const std::chrono::high_resolution_clock::time_point begin =
         std::chrono::high_resolution_clock::now();
-    const mpz_class factorial = CalculateFactorial(n_bigint);
+    const bigint result = CalculateFactorial(n_converted);
     const std::chrono::high_resolution_clock::time_point end =
         std::chrono::high_resolution_clock::now();
 
     const std::chrono::duration<double> execution_seconds = end - begin;
 
-    std::cout << "n! = " << factorial << std::endl
-              << "Executed in " << GetTimeString(execution_seconds) << "."
+    std::cout << n << "! = " << result << std::endl
+              << "Executed in "
+              << mjohnson::common::GetTimeString(execution_seconds) << "."
               << std::endl;
   } while (mjohnson::common::RequestContinue());
 
@@ -48,21 +61,23 @@ int Run() {
 }
 
 // UTILITY FUNCTIONS
-mpz_class CalculateFactorial(const mpz_class& n) {
-  static std::map<mpz_class, mpz_class> result_table;
-
-  {
-    const mpz_class& initial_lookup = result_table[n];
-    if (initial_lookup != 0) {
-      // Shortcut: Result is already stored in lookup table
-      return initial_lookup;
-    }
+bigint CalculateFactorial(const bigint n) {
+  if (n == 0 || n == 1) {
+    return 1;
   }
 
-  mpz_class i = n;
-  mpz_class result = 1;
+  static std::map<bigint, bigint> result_table;
+
+  auto initial_lookup = result_table[n];
+  if (initial_lookup != 0) {
+    // Shortcut: Result is already stored in lookup table
+    return initial_lookup;
+  }
+
+  bigint i = n - 1;  // Start at n - 1, since we already checked n
+  bigint result = 1;
   for (; i > 0; i--) {
-    const mpz_class& lookup_result = result_table[i];
+    const bigint lookup_result = result_table[i];
     if (lookup_result == 0) {
       // The result isn't in the table; skip this iteration
       continue;
@@ -73,58 +88,92 @@ mpz_class CalculateFactorial(const mpz_class& n) {
     break;
   }
 
-  for (mpz_class j = i + 1; j <= n; j++) {
+  // No cached results were found
+  if (i == 0) {
+    // We can't handle i = 0 because 0 * 1 = 0, so all results would be 0. Skip
+    // 0 and fill with known beginning of i = 1, result = 1
+    i = 1;
+    result = 1;
+  }
+
+  // Calculate i + 1 through n, which are the remaining factorials
+  for (bigint j = i + 1; j <= n; j++) {
     result *= j;
+    // Store the result in the hash map
     result_table[j] = result;
   }
 
   return result;
 }
 
-std::string GetTimeString(std::chrono::duration<double> duration_s) {
-  std::stringstream result_stream;
-  result_stream << std::fixed << std::setprecision(0);
-  auto hours = std::chrono::duration_cast<std::chrono::hours>(duration_s);
-  if (hours.count() > 1) {
-    result_stream << hours.count() << "h";
-    duration_s -= hours;
-  }
-  auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration_s);
-  if (minutes.count() > 1) {
-    result_stream << minutes.count() << "m";
-    duration_s -= minutes;
-  }
-  auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration_s);
-  if (seconds.count() > 1) {
-    result_stream << seconds.count() << "s";
-    duration_s -= seconds;
-  }
-  auto milliseconds =
-      std::chrono::duration_cast<std::chrono::milliseconds>(duration_s);
-  if (milliseconds.count() > 1) {
-    result_stream << milliseconds.count() << "ms";
-    duration_s -= milliseconds;
-  }
-  auto microseconds =
-      std::chrono::duration_cast<std::chrono::microseconds>(duration_s);
-  if (microseconds.count() > 1) {
-    result_stream << microseconds.count() << "us";
-    duration_s -= microseconds;
-  }
-  auto nanoseconds =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(duration_s);
-  if (nanoseconds.count() > 1) {
-    result_stream << nanoseconds.count() << "ns";
-  }
+bool ValidateFactorial(uint32_t n) {
+#ifdef USE_GMP
+  if (n >= 100000) {
+    std::stringstream prompt_stream;
+    prompt_stream
+        << n
+        << "! will take a long time to calculate and use more than 8GB of RAM. "
+           "Are you sure that you would like to continue? [y/N] ";
+    const std::string prompt = prompt_stream.str();
 
-  return result_stream.str();
+    const bool should_continue = mjohnson::common::RequestContinue(prompt);
+    return should_continue;
+  }
+#else
+  if (n > 20) {
+    std::cout << "Cannot calculate factorials greater than 20 because it would "
+                 "overflow a 64-bit unsigned integer."
+              << std::endl
+              << std::endl;
+    return false;
+  }
+#endif
+
+  return true;
 }
 
 // UNIT TESTING
 
 // RunUnitTests runs the program's unit tests and returns the success or failure
 // of those unit tests as a boolean.
-bool RunUnitTests() { return true; }
+bool RunUnitTests() {
+  const size_t NUM_RESULTS = 21;
+  static const bigint expected_result[NUM_RESULTS] = {1,
+                                                      1,
+                                                      2,
+                                                      6,
+                                                      24,
+                                                      120,
+                                                      720,
+                                                      5040,
+                                                      40320,
+                                                      362880,
+                                                      3628800,
+                                                      39916800,
+                                                      479001600,
+                                                      6227020800,
+                                                      87178291200,
+                                                      1307674368000,
+                                                      20922789888000,
+                                                      355687428096000,
+                                                      6402373705728000,
+                                                      121645100408832000,
+                                                      2432902008176640000};
+
+  bool test_result = true;
+
+  for (size_t i = 0; i < NUM_RESULTS; i++) {
+    const bigint result = CalculateFactorial(i);
+    const bigint expected = expected_result[i];
+    if (result != expected) {
+      std::cout << "FAIL: " << i << "!: Expected " << expected << ", got "
+                << result << std::endl;
+      test_result = false;
+    }
+  }
+
+  return test_result;
+}
 
 }  // namespace circle
 }  // namespace mjohnson

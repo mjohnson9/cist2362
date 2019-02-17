@@ -3,8 +3,11 @@
 #include "./common.h"
 
 #include <algorithm>
+#include <chrono>  // NOLINT(build/c++11)
+#include <iomanip>
 #include <iostream>
 #include <limits>
+#include <sstream>
 
 namespace mjohnson {
 namespace common {
@@ -116,9 +119,12 @@ void ClearScreen() {
 bool ValidateContinueResponse(const std::string& response);
 
 bool RequestContinue() {
+  return RequestContinue("Would you like to run the program again? [y/N] ");
+}
+
+bool RequestContinue(const std::string& prompt) {
   while (true) {
-    auto response = RequestInput<std::string>(
-        "Would you like to run the program again? ", ValidateContinueResponse);
+    auto response = RequestInput<std::string>(prompt, ValidateContinueResponse);
     if (response.empty()) {
       return false;  // The default option is to not continue
     }
@@ -178,6 +184,45 @@ void ClearInvalidInput() {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
                   '\n');  // Ignore all of the user input currently in the
                           // buffer up to the next new line.
+}
+
+std::string GetTimeString(std::chrono::duration<double> duration_s) {
+  std::stringstream result_stream;
+  result_stream << std::fixed << std::setprecision(0);
+  auto hours = std::chrono::duration_cast<std::chrono::hours>(duration_s);
+  if (hours.count() > 1) {
+    result_stream << hours.count() << "h";
+    duration_s -= hours;
+  }
+  auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration_s);
+  if (minutes.count() > 1) {
+    result_stream << minutes.count() << "m";
+    duration_s -= minutes;
+  }
+  auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration_s);
+  if (seconds.count() > 1) {
+    result_stream << seconds.count() << "s";
+    duration_s -= seconds;
+  }
+  auto milliseconds =
+      std::chrono::duration_cast<std::chrono::milliseconds>(duration_s);
+  if (milliseconds.count() > 1) {
+    result_stream << milliseconds.count() << "ms";
+    duration_s -= milliseconds;
+  }
+  auto microseconds =
+      std::chrono::duration_cast<std::chrono::microseconds>(duration_s);
+  if (microseconds.count() > 1) {
+    result_stream << microseconds.count() << "us";
+    duration_s -= microseconds;
+  }
+  auto nanoseconds =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(duration_s);
+  if (nanoseconds.count() > 1) {
+    result_stream << nanoseconds.count() << "ns";
+  }
+
+  return result_stream.str();
 }
 
 void TrimString(std::string* str) {
