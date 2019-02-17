@@ -74,7 +74,7 @@ void ClearScreen() {
   system("clear");
 #else
 #error "Operating system not supported"
-#endif
+#endif  // End of OS detection
 }
 
 // ValidateContinueResponse is a validation function for RequestInput. It
