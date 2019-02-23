@@ -8,7 +8,7 @@
 #include "../common.h"
 
 namespace mjohnson {
-namespace circle {
+namespace teamleader {
 
 // FORWARD DECLARATIONS
 
@@ -177,7 +177,7 @@ bool ValidateTeamLeaderTrainingTime(int training_time) {
 // of those unit tests as a boolean.
 bool RunUnitTests() { return true; }
 
-}  // namespace circle
+}  // namespace teamleader
 }  // namespace mjohnson
 
 int main(int argc, char* argv[]) {
@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
   }
 
   if (run_unit_tests) {
-    const bool result = mjohnson::circle::RunUnitTests();
+    const bool result = mjohnson::teamleader::RunUnitTests();
 
     if (!result) {
       std::cout << "Unit tests failed." << std::endl;
@@ -198,5 +198,5 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  return mjohnson::circle::Run();
+  return mjohnson::teamleader::Run();
 }

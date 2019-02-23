@@ -6,7 +6,7 @@
 #include <string>
 
 namespace mjohnson {
-namespace circle {
+namespace teamleader {
 
 class Employee {
  private:
@@ -131,5 +131,5 @@ class TeamLeader : public ProductionWorker {
   int completed_training() const { return this->completed_training_; }
 };
 
-}  // namespace circle
+}  // namespace teamleader
 }  // namespace mjohnson
