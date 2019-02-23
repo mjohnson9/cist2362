@@ -100,7 +100,8 @@ void DisplayTeamLeader(const TeamLeader& team_leader) {
             << std::endl;
 }
 
-bool ValidateName(std::string name) {
+bool ValidateName(
+    std::string name) {  // NOLINT(performance-unnecessary-value-param)
   if (name.empty()) {
     std::cout << "You must supply a name." << std::endl << std::endl;
     return false;
@@ -119,7 +120,8 @@ bool ValidateEmployeeNumber(int number) {
   return true;
 }
 
-bool ValidateEmployeeHireDate(std::string hire_date) {
+bool ValidateEmployeeHireDate(
+    std::string hire_date) {  // NOLINT(performance-unnecessary-value-param)
   if (hire_date.empty()) {
     std::cout << "You must enter a hire date." << std::endl << std::endl;
     return false;

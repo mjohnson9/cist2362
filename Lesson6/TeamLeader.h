@@ -11,14 +11,14 @@ namespace teamleader {
 class Employee {
  private:
   // The employee's first and last name
-  std::string name_;
+  std::string name_ = "";
   // The employee's ID number
-  int number_;
+  int number_ = 0;
   // The employee's hire date
-  std::string hire_date_;
+  std::string hire_date_ = "";
 
  public:
-  Employee() : name_(""), number_(0), hire_date_("") {}  // Default constructor
+  Employee() = default;  // Default constructor
   Employee(int number, const std::string& name, const std::string& hire_date) {
     this->set_number(number);
     this->set_name(name);
@@ -45,12 +45,12 @@ class Employee {
 class ProductionWorker : public Employee {
  private:
   // The shift that the production worker works on. 1 = day, 2 = night
-  int shift_;
+  int shift_ = 1;
   // The production worker's pay rate
-  double pay_rate_;
+  double pay_rate_ = 0l;
 
  public:
-  ProductionWorker() : Employee(), shift_(1), pay_rate_(0l) {}
+  ProductionWorker() = default;
   ProductionWorker(int number, const std::string& name,
                    const std::string& hire_date, int shift, double pay_rate)
       : Employee(number, name, hire_date) {
@@ -67,8 +67,12 @@ class ProductionWorker : public Employee {
   int shift() const { return this->shift_; }
   std::string shift_name() const {
     const int shift = this->shift();
-    if (shift == 1) return "Day";
-    if (shift == 2) return "Night";
+    if (shift == 1) {
+      return "Day";
+    }
+    if (shift == 2) {
+      return "Night";
+    }
     return "Unknown";
   }
 
@@ -84,18 +88,14 @@ class ProductionWorker : public Employee {
 class TeamLeader : public ProductionWorker {
  private:
   // The team leader's monthly bonus
-  double bonus_;
+  double bonus_ = 0l;
   // The amount of training that the team leader is required to attend in a year
-  int required_training_;
+  int required_training_ = 0;
   // The amount of training that the team leader has attended this year
-  int completed_training_;
+  int completed_training_ = 0;
 
  public:
-  TeamLeader()
-      : ProductionWorker(),
-        bonus_(0l),
-        required_training_(0),
-        completed_training_(0) {}
+  TeamLeader() = default;
 
   TeamLeader(int number, const std::string& name, const std::string& hire_date,
              int shift, double pay_rate, double bonus, int required_training,

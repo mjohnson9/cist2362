@@ -43,7 +43,7 @@ $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
 	"$(CLANG_TIDY)" -header-filter="$(SOURCE_DIR)" "$(@:%.tidy=%)"
 
 $(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
-	"$(CPPLINT)" "$(@:%.lint=%)"
+	"$(CPPLINT)" --filter=-readability/nolint "$(@:%.lint=%)"
 
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 
