@@ -2,7 +2,7 @@
 
 #include "TeamLeader.h"
 
-#include <iomanip>
+#include <iomanip>  // NOLINT(build/include)
 #include <iostream>
 
 #include "../common.h"
