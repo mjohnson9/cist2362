@@ -1,4 +1,4 @@
-MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKEFILE_PATH := $(lastword $(MAKEFILE_LIST))
 SOURCE_DIR := $(dir $(MAKEFILE_PATH))
 SOURCE_DIR := $(SOURCE_DIR:%/=%)
 BUILD_DIR := $(SOURCE_DIR)/build
