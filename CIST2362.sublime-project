@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
-		"compile_commands": "${project_path}"
+		"compile_commands": "${project_path}",
+		"ClangFormat": {
+			"format_on_save": true
+		}
 	}
 }

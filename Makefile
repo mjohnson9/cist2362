@@ -13,8 +13,15 @@ MKDIR_P ?= mkdir -p
 CPPLINT ?= cpplint
 CLANG_TIDY ?= clang-tidy
 
-CPPOPTIMIZATION ?= 0
-CPPFLAGS ?= -std=c++11 -Wall -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv -O$(CPPOPTIMIZATION) -g
+DEBUG ?= 1
+
+CPPFLAGS += -std=c++11 -Wall -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv
+
+ifeq ($(DEBUG), 1)
+	CPPFLAGS += -g -O0
+else
+	CPPFLAGS += -O3
+endif
 
 TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
@@ -34,7 +41,7 @@ $(BUILD_DIR)/Lesson5/%: $(SOURCE_DIR)/Lesson5/%.cpp $(BUILD_DIR)/common.o
 
 $(BUILD_DIR)/%: $(SOURCE_DIR)/%.cpp $(BUILD_DIR)/common.o
 	@$(MKDIR_P) "$(dir $@)"
-	$(LINK.cpp) -Wconversion "$(BUILD_DIR)/common.o" "$<" -o "$@"
+	$(LINK.cpp) "$(BUILD_DIR)/common.o" "$<" -o "$@"
 
 $(BUILD_DIR)/%.test: $(BUILD_DIR)/%
 	"$(@:%.test=%)" -test
