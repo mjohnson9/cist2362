@@ -2,7 +2,7 @@
 
 SAVEIFS=$IFS
 IFS=$'\n'
-CHANGED_FILES=($(git diff --cached --name-only --diff-filter=ACMRT | grep '\.(cpp|h)$'))
+CHANGED_FILES=($(git diff --cached --name-only --diff-filter=ACMRT | grep -E '\.(cpp|h)$'))
 IFS=$SAVEIFS
 unset SAVEIFS
 
