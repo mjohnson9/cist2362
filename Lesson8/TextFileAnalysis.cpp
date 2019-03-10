@@ -1,11 +1,13 @@
 // Copyright 2019 Michael Johnson
 
 #include <algorithm>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <system_error>  // NOLINT(build/c++11)
 #include <vector>
 
 #include "../common.h"
