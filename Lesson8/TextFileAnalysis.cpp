@@ -159,6 +159,7 @@ void PrintWords(const std::vector<std::string>& words) {
 
   if (line_length != 0) {
     std::cout << std::endl;
+    line_length = 0;
   }
 }
 
