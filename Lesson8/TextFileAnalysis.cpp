@@ -144,8 +144,7 @@ void PrintSymmetricDifference(const std::set<std::string>& first_set,
 
 void PrintWords(const std::vector<std::string>& words) {
   int line_length = 0;
-  for (auto it = words.begin(); it != words.end(); it++) {
-    const auto word = *it;
+  for (const auto word : words) {
     if (line_length != 0) {
       std::cout << ", ";
       line_length += 2;
