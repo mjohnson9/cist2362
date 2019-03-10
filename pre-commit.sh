@@ -9,7 +9,7 @@ unset SAVEIFS
 FAILED=0
 
 for CHANGED_FILE in "${CHANGED_FILES[@]}"; do
-	git show ":${CHANGED_FILE}" | clang-format -style=file -output-replacements-xml -assume-filename="${CHANGED_FILE}" - | grep '<replacement '
+	git show ":${CHANGED_FILE}" | clang-format -style=file -output-replacements-xml -assume-filename="${CHANGED_FILE}" - | grep '<replacement '>/dev/null
 	if [ $? -ne 1 ]; then
 		echo "${CHANGED_FILE}: Not clang-formatted"
 		FAILED=1
