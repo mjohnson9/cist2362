@@ -56,10 +56,12 @@ int Run() {
     if (first_set.empty() && second_set.empty()) {
       std::cout << "The given files were empty." << std::endl << std::endl;
       continue;
-    } else if (first_set.empty()) {
+    }
+    if (first_set.empty()) {
       std::cout << "The first file given was empty." << std::endl << std::endl;
       continue;
-    } else if (second_set.empty()) {
+    }
+    if (second_set.empty()) {
       std::cout << "The second file given was empty." << std::endl << std::endl;
       continue;
     }
