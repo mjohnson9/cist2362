@@ -35,6 +35,7 @@ class IntLinkedList {
 
  public:
   IntLinkedList();
+  IntLinkedList(const IntLinkedList& other);  // Copy constructor
   ~IntLinkedList();
 
   int Get(size_t index) const;
@@ -42,6 +43,7 @@ class IntLinkedList {
   void Append(int v);
   void Insert(size_t index, int v);
   void Delete(size_t index);
+  void Print();
 };
 
 bool ValidateMainMenuChoice(const std::string& choice);
@@ -57,27 +59,19 @@ int Run() {
   std::cout.imbue(std::locale(""));
 
   do {
-    IntLinkedList list;
+    auto list = new IntLinkedList();
 
     while (true) {
       mjohnson::common::ClearScreen();
 
       std::cout << "== List ==" << std::endl;
-
-      const size_t length = list.Length();
-      if (length == 0) {
-        std::cout << "The list is empty." << std::endl << std::endl;
-      } else {
-        for (size_t i = 0; i < length; i++) {
-          std::cout << "[" << i << "] " << list.Get(i) << std::endl;
-        }
-        std::cout << std::endl;
-      }
+      list->Print();
 
       std::cout << "Options:" << std::endl
                 << "[a] Append" << std::endl
                 << "[i] Insert" << std::endl
                 << "[d] Delete" << std::endl
+                << "[c] Copy" << std::endl
                 << "[q] Quit" << std::endl
                 << std::endl;
 
@@ -85,11 +79,16 @@ int Run() {
           "What would you like to do? ", ValidateMainMenuChoice);
 
       if (choice == "a") {
-        PromptAppend(&list);
+        PromptAppend(list);
       } else if (choice == "i") {
-        PromptInsert(&list);
+        PromptInsert(list);
       } else if (choice == "d") {
-        PromptDelete(&list);
+        PromptDelete(list);
+      } else if (choice == "c") {
+        auto copiedList =
+            new IntLinkedList(*list);  // Call the copy constructor
+        delete list;
+        list = copiedList;  // Use the copy as our new list
       } else if (choice == "q") {
         break;
       } else {
@@ -105,7 +104,8 @@ int Run() {
 // UTILITY FUNCTIONS
 
 bool ValidateMainMenuChoice(const std::string& choice) {
-  if (choice != "a" && choice != "i" && choice != "d" && choice != "q") {
+  if (choice != "a" && choice != "i" && choice != "d" && choice != "c" &&
+      choice != "q") {
     std::cout << "Your choice must be a, i, or d." << std::endl << std::endl;
     return false;
   }
@@ -156,6 +156,25 @@ void PromptDelete(IntLinkedList* list) {
 }
 
 IntLinkedList::IntLinkedList() { this->_first = nullptr; }
+
+IntLinkedList::IntLinkedList(const IntLinkedList& other) {
+  IntListItem* other_item = other._first;
+  if (other_item == nullptr) {
+    // Other list is empty, initialize first and return
+    this->_first = nullptr;
+    return;
+  }
+
+  IntListItem* item = new IntListItem(other_item->value());
+  this->_first = item;
+  other_item = other_item->next();
+  for (; other_item != nullptr; other_item = other_item->next()) {
+    auto new_item = new IntListItem(other_item->value());
+    item->set_next(new_item);
+    item = new_item;
+  }
+}
+
 IntLinkedList::~IntLinkedList() {
   // Free the memory associated with all of the items
   IntListItem* item = this->_first;
@@ -284,6 +303,21 @@ void IntLinkedList::Delete(size_t index) {
   item_before->set_next(item_after);
 
   delete item;  // Clean up the memory taken by the deleted item
+}
+
+void IntLinkedList::Print() {
+  const size_t length = this->Length();
+  if (length == 0) {
+    std::cout << "The list is empty." << std::endl << std::endl;
+  } else {
+    size_t i = 0;
+    for (IntListItem* item = this->_first; item != nullptr;
+         item = item->next()) {
+      std::cout << "[" << i << "] " << item->value() << std::endl;
+      i++;
+    }
+    std::cout << std::endl;
+  }
 }
 
 IntListItem::IntListItem(int value) : _value(value) { this->_next = nullptr; }

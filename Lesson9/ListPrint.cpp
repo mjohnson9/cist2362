@@ -234,7 +234,7 @@ void IntLinkedList::Insert(size_t index, int v) {
   // will be the item after
   IntListItem* item_before = this->ItemAt(index - 1);
   const size_t length = this->Length();
-  if (index == (length - 1)) {
+  if (index == length) {
     // Special case: We're inserting at the end of the list
     // As such, we don't attempt to find the item after
     item_before->set_next(item);
@@ -293,7 +293,7 @@ void IntLinkedList::Print() {
   }
 }
 
-IntListItem::IntListItem(int value) : _value(value) {}
+IntListItem::IntListItem(int value) : _value(value) { this->_next = nullptr; }
 
 void IntListItem::set_next(IntListItem* next) { this->_next = next; }
 IntListItem* IntListItem::next() const { return this->_next; }
