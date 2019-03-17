@@ -167,7 +167,7 @@ IntLinkedList::IntLinkedList(const IntLinkedList& other) {
     return;
   }
 
-  IntListItem* item = new IntListItem(other_item->value());
+  auto item = new IntListItem(other_item->value());
   this->_first = item;
   other_item = other_item->next();
   for (; other_item != nullptr; other_item = other_item->next()) {
