@@ -166,7 +166,7 @@ IntLinkedList::IntLinkedList(const IntLinkedList& other) {
     return;
   }
 
-  IntListItem* item = new IntListItem(other_item->value());
+  auto item = new IntListItem(other_item->value());
   this->_first = item;
   other_item = other_item->next();
   for (; other_item != nullptr; other_item = other_item->next()) {
@@ -308,6 +308,11 @@ void IntLinkedList::Delete(size_t index) {
 
 void IntLinkedList::Reverse() {
   IntListItem* old_item = this->_first;
+  if (old_item == nullptr) {
+    // There are no items, so there's nothing to reverse
+    return;
+  }
+
   IntListItem* item = old_item->next();
   old_item->set_next(nullptr);  // The old first has to now be the end
   while (item != nullptr) {
