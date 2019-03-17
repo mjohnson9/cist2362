@@ -43,6 +43,7 @@ class IntLinkedList {
   void Append(int v);
   void Insert(size_t index, int v);
   void Delete(size_t index);
+  void Reverse();
   void Print();
 };
 
@@ -71,7 +72,7 @@ int Run() {
                 << "[a] Append" << std::endl
                 << "[i] Insert" << std::endl
                 << "[d] Delete" << std::endl
-                << "[c] Copy" << std::endl
+                << "[r] Reverse" << std::endl
                 << "[q] Quit" << std::endl
                 << std::endl;
 
@@ -84,11 +85,8 @@ int Run() {
         PromptInsert(list);
       } else if (choice == "d") {
         PromptDelete(list);
-      } else if (choice == "c") {
-        auto copiedList =
-            new IntLinkedList(*list);  // Call the copy constructor
-        delete list;
-        list = copiedList;  // Use the copy as our new list
+      } else if (choice == "r") {
+        list->Reverse();
       } else if (choice == "q") {
         break;
       } else {
@@ -106,9 +104,10 @@ int Run() {
 // UTILITY FUNCTIONS
 
 bool ValidateMainMenuChoice(const std::string& choice) {
-  if (choice != "a" && choice != "i" && choice != "d" && choice != "c" &&
+  if (choice != "a" && choice != "i" && choice != "d" && choice != "r" &&
       choice != "q") {
-    std::cout << "Your choice must be a, i, or d." << std::endl << std::endl;
+    std::cout << "Your choice must be a, i, d, r, or q." << std::endl
+              << std::endl;
     return false;
   }
 
@@ -305,6 +304,19 @@ void IntLinkedList::Delete(size_t index) {
   item_before->set_next(item_after);
 
   delete item;  // Clean up the memory taken by the deleted item
+}
+
+void IntLinkedList::Reverse() {
+  IntListItem* old_item = this->_first;
+  IntListItem* item = old_item->next();
+  old_item->set_next(nullptr);  // The old first has to now be the end
+  while (item != nullptr) {
+    IntListItem* new_item = item->next();
+    item->set_next(old_item);
+    old_item = item;
+    item = new_item;
+  }
+  this->_first = old_item;
 }
 
 void IntLinkedList::Print() {
