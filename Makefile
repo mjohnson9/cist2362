@@ -3,7 +3,7 @@ SOURCE_DIR := $(dir $(MAKEFILE_PATH))
 SOURCE_DIR := $(SOURCE_DIR:%/=%)
 BUILD_DIR := $(SOURCE_DIR)/build
 
-SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sort)
+SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -and \( -not \( -path './common.cpp' -or -path './Template.cpp' \) \) | sort)
 BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
