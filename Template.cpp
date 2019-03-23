@@ -10,12 +10,16 @@ namespace programname {
 // FORWARD DECLARATIONS
 
 // MAIN FUNCTIONS
+
 int Run() {}
 
 // UNIT TESTING
 
-// RunUnitTests runs the program's unit tests and returns the success or
-// failure of those unit tests as a boolean.
+/**
+ * Runs the program's unit tests. Returns the success or failure of those unit
+ * tests.
+ * @return True if all unit tests passed, false otherwise.
+ */
 bool RunUnitTests() { return true; }
 }  // namespace programname
 }  // namespace mjohnson
