@@ -1,5 +1,6 @@
 // Copyright 2019 Michael Johnson
 
+#include <string.h>   // for memmove
 #include <cstddef>    // for size_t
 #include <cstdint>    // for int32_t, int64_t
 #include <iostream>   // for operator<<, endl, basic_ostream
