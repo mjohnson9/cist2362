@@ -3,47 +3,91 @@
 #include <cstddef>    // for size_t
 #include <cstdint>    // for int32_t, int64_t
 #include <iostream>   // for operator<<, endl, basic_ostream
-#include <stdexcept>  // for length_error, invalid_argument
+#include <stdexcept>  // for length_error
 #include <string>     // for allocator, operator+, to_string
 
-#include "../common.h"  // for RequestInput, ParseArgs, RequestContinue
+#include "../common.h"  // for ParseArgs, RequestContinue, RequestContinue
 
 namespace mjohnson {
-namespace staticstack {
+namespace dynamicstack {
 
 // FORWARD DECLARATIONS
 
+/**
+ * Creates a dynamic stack. This stack grows and shrinks to accomodate any
+ * number of elements, up to the limits of allocatable memory.
+ */
 template <typename T>
-class StaticStack {
+class DynamicStack {
  private:
-  T* stack_;
-  size_t stack_size_;
-  size_t stack_capacity_;
+  /**
+   * Item represents a single stack item. It's necessary to maintain the linked
+   * list-like behavior of the stack.
+   */
+  struct Item {
+    Item* next;
+    T value;
+  };
+
+  /**
+   * The item on the top of the stack. All items underneath can be found by
+   * accessing this item's next value.
+   */
+  Item* top_;
 
  public:
-  explicit StaticStack(size_t capacity);
-  ~StaticStack() { delete[] this->stack_; }
+  /**
+   * Constructs a dynamic stack.
+   */
+  DynamicStack();
+  /**
+   * Destructs a dynamic stack.
+   */
+  ~DynamicStack();
 
+  /**
+   * Pushes a value onto the top of the stack.
+   * @param value The value to push onto the top of the stack.
+   */
   void Push(T value);
+  /**
+   * Pops a value off of the top of the stack.
+   * @return The topmost value on the stack.
+   */
   T Pop();
 
+  /**
+   * Retrieves the current size of the stack.
+   * @return The size of the stack.
+   */
   size_t Size();
-  size_t Capacity();
-  bool IsFull();
+  /**
+   * Checks whether the stack is empty.
+   * @return True if the stack is empty, false otherwise.
+   */
   bool IsEmpty();
 };
 
 // MAIN FUNCTIONS
+
+/**
+ * Runs the demo program for the dynamic stack.
+ * @return The exit status code.
+ */
 int Run() {
   do {
-    auto stack_capacity = mjohnson::common::RequestInput<size_t>(
-        "How many items would you like to put on the stack? ", nullptr);
-    StaticStack<int64_t> stack(stack_capacity);
+    DynamicStack<int64_t> stack;
 
-    for (size_t i = 0; i < stack.Capacity(); i++) {
+    for (size_t i = 0;; i++) {
       auto value = mjohnson::common::RequestInput<int64_t>(
-          "What value would you like for item #" + std::to_string(i + 1) + "? ",
+          "What value would you like for item #" + std::to_string(i + 1) +
+              "? (Enter -1 to stop entering values) ",
           nullptr);
+
+      if (value == -1) {
+        break;
+      }
+
       stack.Push(value);
     }
 
@@ -65,68 +109,78 @@ int Run() {
 // FUNCTION DEFINITIONS
 
 template <typename T>
-StaticStack<T>::StaticStack(size_t capacity) {
-  if (capacity <= 0) {
-    throw std::invalid_argument("capacity must be greater than 0");
-  }
-
-  this->stack_ = new T[capacity];
-  this->stack_size_ = 0;
-  this->stack_capacity_ = capacity;
+DynamicStack<T>::DynamicStack() {
+  this->top_ = nullptr;
 }
 
 template <typename T>
-void StaticStack<T>::Push(T value) {
-  if (this->IsFull()) {
-    throw std::length_error("stack is full");
+DynamicStack<T>::~DynamicStack() {
+  auto item = this->top_;
+  while (item != nullptr) {
+    auto next_item = item->next;
+    delete item;
+    item = next_item;
   }
-
-  this->stack_[this->stack_size_] = value;
-  this->stack_size_ += 1;
 }
 
 template <typename T>
-T StaticStack<T>::Pop() {
+void DynamicStack<T>::Push(T value) {
+  auto new_item = new DynamicStack<T>::Item();
+  new_item->next = this->top_;
+  new_item->value = value;
+
+  this->top_ = new_item;
+}
+
+template <typename T>
+T DynamicStack<T>::Pop() {
   if (this->IsEmpty()) {
     throw std::length_error("stack is empty");
   }
 
-  T value = this->stack_[this->stack_size_ - 1];
-  this->stack_size_ -= 1;
+  auto old_top = this->top_;
+  T value = old_top->value;
+
+  this->top_ = old_top->next;
+
+  delete old_top;
 
   return value;
 }
 
 template <typename T>
-bool StaticStack<T>::IsFull() {
-  return (this->stack_size_ == this->stack_capacity_);
+bool DynamicStack<T>::IsEmpty() {
+  return (this->top_ == nullptr);
 }
 
 template <typename T>
-bool StaticStack<T>::IsEmpty() {
-  return (this->stack_size_ == 0);
-}
+size_t DynamicStack<T>::Size() {
+  size_t size = 0;
 
-template <typename T>
-size_t StaticStack<T>::Size() {
-  return this->stack_size_;
-}
+  auto item = this->top_;
+  while (item != nullptr) {
+    size += 1;
 
-template <typename T>
-size_t StaticStack<T>::Capacity() {
-  return this->stack_capacity_;
+    auto old_item = item;
+    item = old_item->next;
+  }
+
+  return size;
 }
 
 // UNIT TESTING
 
-// RunUnitTests runs the program's unit tests and returns the success or
-// failure of those unit tests as a boolean.
+/**
+ * Runs the program's unit tests. Returns the success or failure of those unit
+ * tests.
+ * @return True if all unit tests passed, false otherwise.
+ */
 bool RunUnitTests() {
   bool test_return = true;
 
   {
     // Test empty stack pop
-    StaticStack<bool> test_stack(1);
+    DynamicStack<bool> test_stack;
     try {
       test_stack.Pop();
       std::cerr << "FAIL: Empty stack pop." << std::endl;
@@ -138,22 +192,8 @@ bool RunUnitTests() {
   }
 
   {
-    // Test full stack push
-    StaticStack<bool> test_stack(1);
-    try {
-      test_stack.Push(true);
-      test_stack.Push(true);
-      std::cerr << "FAIL: Full stack push." << std::endl;
-
-      test_return = false;
-    } catch (const std::length_error& ex) {
-      std::cout << "PASS: Full stack push." << std::endl;
-    }
-  }
-
-  {
     // Test retrieving a value
-    StaticStack<int32_t> test_stack(1);
+    DynamicStack<int32_t> test_stack;
     const int32_t kExpectedValue = 5;
 
     test_stack.Push(kExpectedValue);
@@ -174,7 +214,7 @@ bool RunUnitTests() {
     const size_t kValueMultiplier = 5;
     const size_t kNumValues = 10;
 
-    StaticStack<size_t> test_stack(kNumValues);
+    DynamicStack<size_t> test_stack;
 
     for (size_t i = 0; i < kNumValues; i++) {
       test_stack.Push(i * kValueMultiplier);
@@ -208,7 +248,7 @@ bool RunUnitTests() {
 
   return test_return;
 }
-}  // namespace staticstack
+}  // namespace dynamicstack
 }  // namespace mjohnson
 
 int main(int argc, char* argv[]) {
@@ -218,7 +258,7 @@ int main(int argc, char* argv[]) {
   }
 
   if (run_unit_tests) {
-    const bool result = mjohnson::staticstack::RunUnitTests();
+    const bool result = mjohnson::dynamicstack::RunUnitTests();
 
     if (!result) {
       std::cout << "Unit tests failed." << std::endl;
@@ -229,7 +269,7 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  return mjohnson::staticstack::Run();
+  return mjohnson::dynamicstack::Run();
 }
 
 // Grade: 100
