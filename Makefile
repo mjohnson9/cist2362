@@ -20,7 +20,7 @@ CPPFLAGS += -std=c++11 -Wall -Wextra -Wc++11-compat -Werror -pedantic-errors -ff
 ifeq ($(DEBUG), 1)
 	CPPFLAGS += -g -O0
 else
-	CPPFLAGS += -O3
+	CPPFLAGS += -Ofast
 endif
 
 TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
