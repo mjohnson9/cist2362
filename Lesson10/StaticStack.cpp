@@ -1,9 +1,12 @@
 // Copyright 2019 Michael Johnson
 
-#include <iostream>
-#include <stdexcept>
+#include <cstddef>    // for size_t
+#include <cstdint>    // for int32_t, int64_t
+#include <iostream>   // for operator<<, endl, basic_ostream
+#include <stdexcept>  // for length_error, invalid_argument
+#include <string>     // for allocator, operator+, to_string
 
-#include "../common.h"
+#include "../common.h"  // for RequestInput, ParseArgs, RequestContinue
 
 namespace mjohnson {
 namespace staticstack {
