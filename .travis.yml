@@ -27,8 +27,7 @@ jobs:
       before_script:
         - compiledb -f make "-j${NPROC}" all
       script:
-        - make -j1 lint
-        - make -j1 tidy
+        - make -j1 -k style
 
 install:
   - 'if [ "${TRAVIS_OS_NAME}" == "osx" ]; then (brew list coreutils &>/dev/null || brew install coreutils) && export NPROC="$(gnproc)"; else sudo apt-get install -y coreutils && export NPROC="$(nproc)"; fi'

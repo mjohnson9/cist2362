@@ -27,7 +27,7 @@ TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
 
 
-.PHONY: all test tidy clean
+.PHONY: all tidy lint style test clean
 
 all: $(BINS)
 
@@ -55,6 +55,8 @@ $(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 
 lint: $(LINTS) $(SOURCE_DIR)/common.cpp.lint
+
+style: tidy lint
 
 test: $(TESTS)
 	@echo "Tests passed"
