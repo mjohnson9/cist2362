@@ -1,10 +1,15 @@
 // Copyright 2019 Michael Johnson
 
-#include <ctime>
-#include <iostream>
-#include <memory>
+#include <cstddef>    // for size_t
+#include <cstdint>    // for uint64_t
+#include <ctime>      // for mktime, strptime, localtime_r, time_t
+#include <iostream>   // for cout
+#include <locale>     // for locale
+#include <memory>     // for shared_ptr
+#include <stdexcept>  // for length_error, logic_error
+#include <string>     // for string
 
-#include "../common.h"
+#include "../common.h"  // for ClearScreen, RequestInput, LowerString
 
 namespace mjohnson {
 namespace inventorybinstack {

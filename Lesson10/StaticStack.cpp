@@ -2,9 +2,10 @@
 
 #include <cstddef>    // for size_t
 #include <cstdint>    // for int32_t, int64_t
-#include <iostream>   // for operator<<, endl, basic_ostream
+#include <iostream>   // for cout
+#include <locale>     // for locale
 #include <stdexcept>  // for length_error, invalid_argument
-#include <string>     // for allocator, operator+, to_string
+#include <string>     // for string, to_string
 
 #include "../common.h"  // for RequestInput, ParseArgs, RequestContinue
 
