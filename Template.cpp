@@ -11,7 +11,16 @@ namespace programname {
 
 // MAIN FUNCTIONS
 
-int Run() {}
+int Run() {
+  // Add the computer's locale to cout. This lets us do thousands separators and
+  // decimal points in the locale of the user.
+  std::cout.imbue(std::locale(""));
+
+  do {
+  } while (mjohnson::common::RequestContinue());
+
+  return 0;
+}
 
 // UNIT TESTING
 

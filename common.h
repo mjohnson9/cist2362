@@ -79,5 +79,11 @@ std::string GetTimeString(std::chrono::duration<double> duration_s);
 
 // TrimString trims the whitespace from both ends of the string
 void TrimString(std::string* str);
+
+/**
+ * Converts a string to all lowercase.
+ * @param str The string to convert.
+ */
+void LowerString(std::string* str);
 }  // namespace common
 }  // namespace mjohnson

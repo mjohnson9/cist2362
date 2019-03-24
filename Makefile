@@ -18,7 +18,7 @@ DEBUG ?= 1
 CPPFLAGS += -std=c++11 -Wall -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv
 
 ifeq ($(DEBUG), 1)
-	CPPFLAGS += -g -O0
+	CPPFLAGS += -glldb -O0
 else
 	CPPFLAGS += -Ofast -mtune=native -march=native
 endif

@@ -36,6 +36,10 @@ class StaticQueue {
 
 // MAIN FUNCTIONS
 int Run() {
+  // Add the computer's locale to cout. This lets us do thousands separators and
+  // decimal points in the locale of the user.
+  std::cout.imbue(std::locale(""));
+
   do {
     auto queue_capacity = mjohnson::common::RequestInput<size_t>(
         "How many items would you like to put in the queue? ", nullptr);

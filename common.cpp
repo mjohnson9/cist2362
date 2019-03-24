@@ -200,6 +200,10 @@ void TrimString(std::string* str) {
                            // character (searching right to left) to the end
 }
 
+void LowerString(std::string* str) {
+  std::transform(str->begin(), str->end(), str->begin(), ::tolower);
+}
+
 // Instantiate RequestInput templates for needed types
 /*template int32_t RequestInput<int32_t>(
     const std::string& prompt, const std::function<bool(int32_t)>& validator);

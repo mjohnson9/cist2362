@@ -75,6 +75,10 @@ class DynamicStack {
  * @return The exit status code.
  */
 int Run() {
+  // Add the computer's locale to cout. This lets us do thousands separators and
+  // decimal points in the locale of the user.
+  std::cout.imbue(std::locale(""));
+
   do {
     DynamicStack<int64_t> stack;
 
