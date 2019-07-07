@@ -3,7 +3,7 @@ SOURCE_DIR := $(dir $(MAKEFILE_PATH))
 SOURCE_DIR := $(SOURCE_DIR:%/=%)
 BUILD_DIR := $(SOURCE_DIR)/build
 
-SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -not -name 'common.cpp' | sort)
+SRCS := $(shell find "$(SOURCE_DIR)" -iname '*.cpp' -and \( -not \( -path './common.cpp' -or -path './Template.cpp' \) \) | sort)
 BINS := $(SRCS:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%)
 TESTS := $(BINS:%=%.test)
 TIDYS := $(SRCS:%=%.tidy)
@@ -18,16 +18,16 @@ DEBUG ?= 1
 CPPFLAGS += -std=c++11 -Wall -Wextra -Wc++11-compat -Werror -pedantic-errors -ffast-math -ftrapv
 
 ifeq ($(DEBUG), 1)
-	CPPFLAGS += -g -O0
+	CPPFLAGS += -glldb -O0
 else
-	CPPFLAGS += -O3
+	CPPFLAGS += -Ofast -mtune=native -march=native
 endif
 
 TIDYFLAGS := $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
 TIDYFLAGS := $(TIDYFLAGS:%=-extra-arg="%")
 
 
-.PHONY: all test tidy clean
+.PHONY: all tidy lint style test clean
 
 all: $(BINS)
 
@@ -50,11 +50,13 @@ $(SOURCE_DIR)/%.tidy: $(SOURCE_DIR)/%
 	"$(CLANG_TIDY)" -header-filter="$(SOURCE_DIR)" "$(@:%.tidy=%)"
 
 $(SOURCE_DIR)/%.lint: $(SOURCE_DIR)/%
-	"$(CPPLINT)" --filter=-readability/nolint "$(@:%.lint=%)"
+	"$(CPPLINT)" "$(@:%.lint=%)"
 
 tidy: $(TIDYS) $(SOURCE_DIR)/common.cpp.tidy
 
 lint: $(LINTS) $(SOURCE_DIR)/common.cpp.lint
+
+style: tidy lint
 
 test: $(TESTS)
 	@echo "Tests passed"

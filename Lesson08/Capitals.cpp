@@ -86,7 +86,7 @@ int Run() {
 
 StateCapitals::StateCapitals() {
   this->_random_generator = std::default_random_engine(
-      std::random_device {}());  // Create a random generator, seeded from the
+      std::random_device{}());  // Create a random generator, seeded from the
                                 // system random device
   this->_random_distribution = std::uniform_int_distribution<size_t>(
       0, StateCapitals::_state_capitals.size());
