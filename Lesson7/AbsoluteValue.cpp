@@ -23,11 +23,11 @@ int Run() {
   do {
     mjohnson::common::ClearScreen();
 
-    const auto nInt64 =
+    /*const auto nInt64 =
         mjohnson::common::RequestInput<int64_t>("Enter a number: ", nullptr);
     std::cout << "AbsoluteValue(" << nInt64 << ") = " << AbsoluteValue(nInt64)
               << std::endl
-              << std::endl;
+              << std::endl;*/
 
     const auto nDouble = mjohnson::common::RequestInput<double>(
         "Enter a decimal number: ", nullptr);
